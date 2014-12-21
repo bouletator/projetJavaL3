@@ -10,6 +10,8 @@ Intellij Idea : http://www.jetbrains.com/idea/
 
 GenMyModel : http://www.genmymodel.com/
 
+(Lien vers le modèle: https://repository.genmymodel.com/evan.graine/ProjetJava)
+
 Le rapport a été réalisé via LaTeX : http://www.latex-project.org/
 
 Et le support de présentation via Bunkr : https://www.bunkr.me/
