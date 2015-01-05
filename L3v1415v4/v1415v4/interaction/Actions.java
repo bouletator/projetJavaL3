@@ -126,7 +126,7 @@ public class Actions implements IActions {
 		    if(attaquant.getElement().getVie() > 0 && defenseur.getElement().getVie() > 0) { 
 			    DuelBasic duel = new DuelBasic(arene, attaquant, defenseur);
 
-
+				// TODO BRUTES!
 				duel.realiserCombat(); 
 				
 				actionExecutee = true;

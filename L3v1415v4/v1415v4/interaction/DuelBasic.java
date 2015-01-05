@@ -47,36 +47,41 @@ public class DuelBasic implements IDuel {
 		return ((Personnage) per2.getElement()).getLeader() == per1.getRefRMI();
 	}
 
-	public void realiserConversion(){
+	public void realiserConversion() throws RemoteException {
+		System.out.print("Conversion de "+defenseur.getRefRMI()+" par "+attaquant.getRefRMI()+" : ");
+
+
+		try {
+			if(memeLeader(attaquant, defenseur) || isLeader(attaquant, defenseur)) {
+			// s'ils ont le meme leader ou que le defenseur est dans l'equipe de l'attaquant, rien ne se passe
+			System.out.println("Rien ne se passe");
+
+			} else {
+				// attaque
+				convertir(attaquant, defenseur);
+			}
+
+
+		} catch (RemoteException e) {
+			System.out.println("Erreur lors d'un duel :");
+			e.printStackTrace();
+		}
 
 	}
 	
 	@Override
 	public void realiserCombat() throws RemoteException {
-		Personnage pAtt = (Personnage) attaquant.getElement();
-		Personnage pDef = (Personnage) defenseur.getElement();
 
-	
-		System.out.print("Duel entre " + attaquant.getRefRMI() + " et " + defenseur.getRefRMI() + " : ");
+		System.out.print("Combat entre " + attaquant.getRefRMI() + " et " + defenseur.getRefRMI() + " : ");
 	
 		try {
 			if(memeLeader(attaquant, defenseur) || isLeader(attaquant, defenseur)) {
 				// s'ils ont le meme leader ou que le defenseur est dans l'equipe de l'attaquant, rien ne se passe
 				System.out.println("Rien ne se passe");
 				
-			/*} else if (isLeader(defenseur, attaquant)) {
-				if(attCharisme > defCharisme) {
-					// coup d'etat
-					System.out.println(attaquant.getRefRMI() + " realise un coup d'etat contre " + defenseur.getRefRMI());
-				} else {
-					// coup d'etat echoue
-					System.out.println("Rien ne se passe");
-				}*/
-				
 			} else {
-				// duel
-					// def frappe par att
-					frapper(attaquant, defenseur);
+				// attaque
+				frapper(attaquant, defenseur);
 			}
 					
 
@@ -92,23 +97,31 @@ public class DuelBasic implements IDuel {
 	 * @param eq personnage a ajouter a l'equipe
 	 */
 	private void convertir(IConsole per, IConsole eq) throws RemoteException {
-		int leader = ((Personnage) per.getElement()).getLeader(); // ajouter au leader s'il y en a un
 
-		//le personnage reçoit la determination de son enroleur
-		eq.getElement().getCaract().put("determination", ((Personnage) per.getElement()).getDetermination());
+		// ajouter au leader s'il y en a un
+		int leader = ((Personnage) per.getElement()).getLeader();
 
-		if(leader == -1) { // le personnage n'est pas dans une equipe
-			eq.changerLeader(per);
-			per.getElement().parler("J'ajoute " + eq.getRefRMI() + " a mon equipe", per.getVueElement());
-			System.out.println(per.getRefRMI() + " ajoute a son equipe " + eq.getRefRMI());
-			
-		} else { // le personnage a un leader
-			IConsole lead = arene.consoleFromRef(leader);
-			
-			eq.changerLeader(lead);
-			
-			lead.getElement().parler("J'ajoute " + eq.getRefRMI() + " a mon equipe (par " + per.getRefRMI() + ")", lead.getVueElement());
-			System.out.println(leader + " ajoute a son equipe (par " + per.getRefRMI() + ") " + eq.getRefRMI());
+		// si charisme inférieur à deter alors rien ne se passe sinon le perso est changé d'équipe
+		if (((Personnage)eq.getElement()).getDetermination() < ((Personnage)per.getElement()).getCharisme()) {
+			if (leader == -1) { // le personnage n'est pas dans une equipe
+				eq.changerLeader(per);
+				per.getElement().parler("J'ajoute " + eq.getRefRMI() + " a mon equipe", per.getVueElement());
+				System.out.println(per.getRefRMI() + " ajoute a son equipe " + eq.getRefRMI());
+
+			} else { // le personnage a un leader
+				IConsole lead = arene.consoleFromRef(leader);
+
+				eq.changerLeader(lead);
+
+				lead.getElement().parler("J'ajoute " + eq.getRefRMI() + " a mon equipe (par " + per.getRefRMI() + ")", lead.getVueElement());
+				System.out.println(leader + " ajoute a son equipe (par " + per.getRefRMI() + ") " + eq.getRefRMI());
+			}
+			//le personnage reçoit la determination de son enroleur
+			eq.getElement().getCaract().put("determination", ((Personnage) per.getElement()).getDetermination());
+
+		}
+		else {
+			System.out.println("Rien ne se passe");
 		}
 	}
 
