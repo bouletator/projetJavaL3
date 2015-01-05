@@ -80,8 +80,8 @@ public class DuelBasic implements IDuel {
 					ajouterEquipe(attaquant, defenseur);
 					
 				} else if(attForce >= defCharisme) {
-					// def tue par att
-					tuer(attaquant, defenseur);
+					// def frappe par att
+					frappe(attaquant, defenseur);
 					
 				} else {
 					
@@ -91,7 +91,7 @@ public class DuelBasic implements IDuel {
 						
 					} else {
 						// att tue par def
-						tuer(defenseur, attaquant);
+						frappe(defenseur, attaquant);
 					}
 					
 				}
@@ -109,10 +109,12 @@ public class DuelBasic implements IDuel {
 	 */
 	private void ajouterEquipe(IConsole per, IConsole eq) throws RemoteException {
 		int leader = ((Personnage) per.getElement()).getLeader(); // ajouter au leader s'il y en a un
-		
+
+		//le personnage reçoit la determination de son enroleur
+		eq.getElement().getCaract().put("determination", ((Personnage) per.getElement()).getDetermination());
+
 		if(leader == -1) { // le personnage n'est pas dans une equipe
 			eq.changerLeader(per);
-			
 			per.getElement().parler("J'ajoute " + eq.getRefRMI() + " a mon equipe", per.getVueElement());
 			System.out.println(per.getRefRMI() + " ajoute a son equipe " + eq.getRefRMI());
 			
@@ -129,14 +131,21 @@ public class DuelBasic implements IDuel {
 	/**
 	 * Effectue les actions lorsqu'un personnage tue un autre.
 	 * @param per personnage qui tue
-	 * @param tue personnage tue
+	 * @param frappe personnage tue
 	 */
-	private void tuer(IConsole per, IConsole tue) throws RemoteException {
-		per.getElement().parler("Je tue " + tue.getRefRMI(), per.getVueElement());
-		System.out.println(per.getRefRMI() + " tue " + tue.getRefRMI());
-		
-		tue.enleverTousPersonnagesEquipe();
-		tue.perdreVie(per.getElement().getCaract("force"));
-	}
+	private void frappe(IConsole per, IConsole frappe) throws RemoteException {
+		//annonce de la frappe
+		per.getElement().parler("Je frappe " + frappe.getRefRMI(), per.getVueElement());
+		System.out.println(per.getRefRMI() + " frappe " + frappe.getRefRMI());
 
+		//perte de vie en conséquence
+		//Si la défense de frappe plus grande que l'attaque de per alors il ne se passe rien sinon frappe perd en vie
+		//la quantitié de force moins sa défence
+		if(((Personnage)frappe.getElement()).getDefense()<((Personnage)per.getElement()).getForce()) {
+			frappe.perdreVie(((Personnage) per.getElement()).getForce() - ((Personnage) frappe.getElement()).getDefense());
+		}
+
+		//si le personnage meurt alors on l'enlève de tous les personnages de son équipe
+		if (frappe.getElement().getVie() <= 0) frappe.enleverTousPersonnagesEquipe();
+	}
 }
