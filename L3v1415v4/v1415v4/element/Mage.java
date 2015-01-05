@@ -32,6 +32,7 @@ public class Mage extends PoseurObjet {
 		super(nom, force, charisme, defense, determination, vitesse, vision, nbObjetMAx);
 	}
 
+	@Override
 	public void strategie(VueElement ve, Hashtable<Integer,VueElement> voisins, Integer refRMI) throws RemoteException {
 		Actions actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
 		Deplacements deplacements = new Deplacements(ve,voisins);
@@ -64,13 +65,17 @@ public class Mage extends PoseurObjet {
 				actions.interaction(ve.getRef(), refPlusProche, ve.getControleur().getArene());
 				potionNonMiseDernierTour = true;
 			}
+			else if(elemPlusProche instanceof Personnage && memeEquipe)
+			{
+				//TODO : donner une potion de soin à l'allié
+			}
 		}
-		else if(distPlusProche <=5 && potionNonMiseDernierTour)
+		else if(distPlusProche <=5 && !memeEquipe &&potionNonMiseDernierTour)
 		{
 			//TODO : mettre en place une potion dans la direction de l'adversaire
 			potionNonMiseDernierTour = false;
 		}
-		else if(distPlusProche <= 5 && !potionNonMiseDernierTour)
+		else if(distPlusProche <= 5 && !memeEquipe && !potionNonMiseDernierTour)
 		{
 			parler("J'ai mis une potion sur la route de "+refPlusProche,ve);
 			actions.setInteractionType(Actions.FUIR);

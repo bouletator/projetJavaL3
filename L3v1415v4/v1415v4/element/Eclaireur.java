@@ -37,8 +37,9 @@ public class Eclaireur	extends Personnage {
 	 * @param refRMI reference attribuee a cet element par le serveur
 	 * @throws java.rmi.RemoteException
 	 */
-	/* TODO : revoir la stratégie  de l'éclaireur pour intégrer les communications */
-	public void strategieBase(VueElement ve, Hashtable<Integer,VueElement> voisins, Integer refRMI) throws RemoteException {
+
+	@Override
+	public void strategie(VueElement ve, Hashtable<Integer,VueElement> voisins, Integer refRMI) throws RemoteException {
 		Actions actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
 		Deplacements deplacements = new Deplacements(ve,voisins);
 

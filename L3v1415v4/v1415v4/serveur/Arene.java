@@ -1,5 +1,6 @@
 package serveur;
 
+import element.*;
 import interfaceGraphique.VueElement;
 
 import java.awt.Point;
@@ -15,10 +16,6 @@ import java.util.Enumeration;
 import java.util.Hashtable;
 
 import controle.IConsole;
-import element.Element;
-import element.Potion;
-import element.IElement;
-import element.Personnage;
 import utilitaires.Calculs;
 
 /**
@@ -294,7 +291,43 @@ public class Arene extends UnicastRemoteObject implements IArene, Runnable {
 				aux.put(s.getRef(), s);
 			}
 		}
-		return aux;
+
+		ArrayList<Point> listeMur = new ArrayList<Point>();
+		for(VueElement s : aux.values())
+		{
+			if(s.getControleur().getElement() instanceof Mur)
+			{
+				listeMur.add(s.getPoint());
+			}
+		}
+
+		if(listeMur.isEmpty())
+		{
+			return aux;
+		}
+
+		Hashtable<Integer,VueElement> auxBis = new Hashtable<Integer, VueElement>(aux);
+
+		for(Point p : listeMur)
+		{
+			Point vecteurCourant = new Point((int) (p.getX() - pos.getX()),(int)(p.getY() - pos.getY()));
+			for(VueElement s : aux.values())
+			{
+				if(! (s.getControleur().getElement() instanceof Mur))
+				{
+					Point pointCourant = s.getPoint();
+					if((vecteurCourant.getX()*pointCourant.getY() - vecteurCourant.getY()*pointCourant.getX()) == 0)
+					{
+						if((vecteurCourant.getX()/pointCourant.getX()) < 0 && (vecteurCourant.getY()/pointCourant.getY()) < 0)
+						{
+							auxBis.remove(s);
+						}
+					}
+				}
+			}
+		}
+		return  auxBis;
+
 	}
 	
 	/**

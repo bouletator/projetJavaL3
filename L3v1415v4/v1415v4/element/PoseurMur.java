@@ -38,6 +38,7 @@ public class PoseurMur extends PoseurObjet {
 	 * @param refRMI reference attribuee a cet element par le serveur
 	 * @throws java.rmi.RemoteException
 	 */
+	@Override
 	public void strategie(VueElement ve, Hashtable<Integer,VueElement> voisins, Integer refRMI) throws RemoteException {
 		Actions actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
 		Deplacements deplacements = new Deplacements(ve,voisins);
@@ -45,54 +46,58 @@ public class PoseurMur extends PoseurObjet {
 		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
 			parler("J'erre...", ve);
 			deplacements.seDirigerVers(0); //errer
+			return;
+		}
 
-		} else {
-			VueElement cible = Calculs.chercherElementProche(ve, voisins);
+		VueElement cible = Calculs.chercherElementProche(ve, voisins);
 
-			int distPlusProche = Calculs.distanceChebyshev(ve.getPoint(), cible.getPoint());
+		int distPlusProche = Calculs.distanceChebyshev(ve.getPoint(), cible.getPoint());
 
-			int refPlusProche = cible.getRef();
-			Element elemPlusProche = cible.getControleur().getElement();
+		int refPlusProche = cible.getRef();
+		Element elemPlusProche = cible.getControleur().getElement();
 
-			// dans la meme equipe ?
-			boolean memeEquipe = false;
+		// dans la meme equipe ?
+		boolean memeEquipe = false;
 
-			if(elemPlusProche instanceof Personnage) {
-				memeEquipe = (this.getLeader() != -1 && this.getLeader() == ((Personnage) elemPlusProche).getLeader()) || // meme leader
-						this.getLeader() == refPlusProche || // cible est le leader de this
-						((Personnage) elemPlusProche).getLeader() == refRMI; // this est le leader de cible
-			}
+		if(elemPlusProche instanceof Personnage) {
+			memeEquipe = (this.getLeader() != -1 && this.getLeader() == ((Personnage) elemPlusProche).getLeader()) || // meme leader
+					this.getLeader() == refPlusProche || // cible est le leader de this
+					((Personnage) elemPlusProche).getLeader() == refRMI; // this est le leader de cible
+		}
 
-			if(distPlusProche <= 2) { // si suffisamment proches
-				if(elemPlusProche instanceof Potion) { // potion
-					// ramassage
-					parler("Je ramasse une potion", ve);
-					actions.ramasser(refRMI, refPlusProche, ve.getControleur().getArene());
+		if(distPlusProche <= 2) { // si suffisamment proches
+			if(elemPlusProche instanceof Personnage && !memeEquipe) { // ennemi trop proche
+				parler("Je fuis un adversaire",ve);
+				actions.setInteractionType(Actions.FUIR);
+				actions.interaction(ve.getRef(), refPlusProche, ve.getControleur().getArene());
 
-				} else { // personnage
-					if(!memeEquipe) { // duel seulement si pas dans la meme equipe (pas de coup d'etat possible dans ce cas)
-						// duel
-						parler("Je fais un duel avec " + refPlusProche, ve);
-						actions.interaction(refRMI, refPlusProche, ve.getControleur().getArene());
-					} else {
-						parler("J'erre...", ve);
-						deplacements.seDirigerVers(0); // errer
-					}
-				}
-			} else { // si voisins, mais plus eloignes
-				if(!memeEquipe) { // potion ou enemmi
-					// je vais vers le plus proche
-					parler("Je vais vers mon voisin " + refPlusProche, ve);
-					deplacements.seDirigerVers(refPlusProche);
-
-				} else {
-					parler("J'erre...", ve);
-					deplacements.seDirigerVers(0); // errer
-				}
 			}
 		}
+		else if(distPlusProche <=5)
+		{
+			//TODO : mettre en place un mur dans la direction de l'adversaire
+
+		}
+		else
+		{ // si voisins, mais plus eloignes
+			if(!memeEquipe && !(elemPlusProche instanceof Potion))
+			{
+				parler("Je vais vers mon voisin " + refPlusProche, ve);
+				deplacements.seDirigerVers(refPlusProche);
+			}
+			else
+			{
+				parler("J'erre...", ve);
+				deplacements.seDirigerVers(0); // errer
+			}
+		}
+
 	}
 
+	/***
+	 * Ajoute un mur aux murs disponible pour le poseur
+	 * @param m
+	 */
 	public void ajouterMur(Mur m)
 	{
 		ajouterObjet(m);
