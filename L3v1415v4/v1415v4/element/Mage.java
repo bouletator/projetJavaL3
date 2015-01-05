@@ -13,6 +13,8 @@ import java.util.Hashtable;
  */
 public class Mage extends PoseurObjet {
 
+	private boolean potionNonMiseDernierTour = true;
+
 	/**
 	 * Constructeur d'un personnage avec un nom et une quantite de force et de charisme.
 	 * Au depart, le personnage n'a ni leader ni equipe.
@@ -37,50 +39,56 @@ public class Mage extends PoseurObjet {
 		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
 			parler("J'erre...", ve);
 			deplacements.seDirigerVers(0); //errer
+			return;
+		}
+		VueElement cible = Calculs.chercherElementProche(ve, voisins);
 
-		} else {
-			VueElement cible = Calculs.chercherElementProche(ve, voisins);
+		int distPlusProche = Calculs.distanceChebyshev(ve.getPoint(), cible.getPoint());
 
-			int distPlusProche = Calculs.distanceChebyshev(ve.getPoint(), cible.getPoint());
+		int refPlusProche = cible.getRef();
+		Element elemPlusProche = cible.getControleur().getElement();
 
-			int refPlusProche = cible.getRef();
-			Element elemPlusProche = cible.getControleur().getElement();
+		// dans la meme equipe ?
+		boolean memeEquipe = false;
 
-			// dans la meme equipe ?
-			boolean memeEquipe = false;
+		if(elemPlusProche instanceof Personnage) {
+			memeEquipe = (this.getLeader() != -1 && this.getLeader() == ((Personnage) elemPlusProche).getLeader()) || // meme leader
+					this.getLeader() == refPlusProche || // cible est le leader de this
+					((Personnage) elemPlusProche).getLeader() == refRMI; // this est le leader de cible
+		}
 
-			if(elemPlusProche instanceof Personnage) {
-				memeEquipe = (this.getLeader() != -1 && this.getLeader() == ((Personnage) elemPlusProche).getLeader()) || // meme leader
-						this.getLeader() == refPlusProche || // cible est le leader de this
-						((Personnage) elemPlusProche).getLeader() == refRMI; // this est le leader de cible
+		if(distPlusProche <= 2) { // si suffisamment proches
+			if(elemPlusProche instanceof Personnage && !memeEquipe) { // ennemi trop proche
+				parler("Je fuis un adversaire",ve);
+				actions.setInteractionType(Actions.FUIR);
+				actions.interaction(ve.getRef(), refPlusProche, ve.getControleur().getArene());
+				potionNonMiseDernierTour = true;
 			}
-
-			if(distPlusProche <= 2) { // si suffisamment proches
-				if(elemPlusProche instanceof Potion) { // potion
-					// ramassage
-					parler("Je ramasse une potion", ve);
-					actions.ramasser(refRMI, refPlusProche, ve.getControleur().getArene());
-
-				} else { // personnage
-					if(!memeEquipe) { // duel seulement si pas dans la meme equipe (pas de coup d'etat possible dans ce cas)
-						// duel
-						parler("Je fais un duel avec " + refPlusProche, ve);
-						actions.interaction(refRMI, refPlusProche, ve.getControleur().getArene());
-					} else {
-						parler("J'erre...", ve);
-						deplacements.seDirigerVers(0); // errer
-					}
-				}
-			} else { // si voisins, mais plus eloignes
-				if(!memeEquipe) { // potion ou enemmi
-					// je vais vers le plus proche
-					parler("Je vais vers mon voisin " + refPlusProche, ve);
-					deplacements.seDirigerVers(refPlusProche);
-
-				} else {
-					parler("J'erre...", ve);
-					deplacements.seDirigerVers(0); // errer
-				}
+		}
+		else if(distPlusProche <=5 && potionNonMiseDernierTour)
+		{
+			//TODO : mettre en place une potion dans la direction de l'adversaire
+			potionNonMiseDernierTour = false;
+		}
+		else if(distPlusProche <= 5 && !potionNonMiseDernierTour)
+		{
+			parler("J'ai mis une potion sur la route de "+refPlusProche,ve);
+			actions.setInteractionType(Actions.FUIR);
+			actions.interaction(ve.getRef(),refPlusProche,ve.getControleur().getArene());
+		}
+		else
+		{ // si voisins, mais plus eloignes
+			if(!memeEquipe && !(elemPlusProche instanceof Potion))
+			{
+				parler("Je vais vers mon voisin " + refPlusProche, ve);
+				deplacements.seDirigerVers(refPlusProche);
+				potionNonMiseDernierTour = true;
+			}
+			else
+			{
+				parler("J'erre...", ve);
+				deplacements.seDirigerVers(0); // errer
+				potionNonMiseDernierTour = true;
 			}
 		}
 	}

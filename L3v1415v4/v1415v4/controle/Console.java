@@ -137,7 +137,7 @@ public class Console extends UnicastRemoteObject implements IConsole {
 			//decremente sa duree de vie
 			ve.decrTTL(); 
 			//mets a jour ses voisins 
-			voisins = arene.voisins(ve.getPoint(), refRMI, this.getElement());
+			voisins = arene.voisins(ve.getPoint(), refRMI);
 			//applique la strategie du personnage
             elem.strategie(this.ve, this.voisins, refRMI);
 		}

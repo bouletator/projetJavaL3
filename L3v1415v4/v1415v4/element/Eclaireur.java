@@ -5,6 +5,7 @@ import interaction.Deplacements;
 import interfaceGraphique.VueElement;
 import utilitaires.Calculs;
 
+import java.awt.*;
 import java.rmi.RemoteException;
 import java.util.Hashtable;
 
@@ -30,64 +31,82 @@ public class Eclaireur	extends Personnage {
 	}
 
 	/***
-	 * Stratégie d'un éclaireur
+	 * Stratégie de base d'un éclaireur
 	 * @param ve vue de l'element
 	 * @param voisins element voisins de cet element
 	 * @param refRMI reference attribuee a cet element par le serveur
-	 * @throws RemoteException
+	 * @throws java.rmi.RemoteException
 	 */
 	/* TODO : revoir la stratégie  de l'éclaireur pour intégrer les communications */
-	public void strategie(VueElement ve, Hashtable<Integer,VueElement> voisins, Integer refRMI) throws RemoteException {
+	public void strategieBase(VueElement ve, Hashtable<Integer,VueElement> voisins, Integer refRMI) throws RemoteException {
 		Actions actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
 		Deplacements deplacements = new Deplacements(ve,voisins);
 
 		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
 			parler("J'erre...", ve);
 			deplacements.seDirigerVers(0); //errer
+			return;
+		}
 
-		} else {
-			VueElement cible = Calculs.chercherElementProche(ve, voisins);
+		VueElement cible = Calculs.chercherElementProche(ve, voisins);
 
-			int distPlusProche = Calculs.distanceChebyshev(ve.getPoint(), cible.getPoint());
+		int distPlusProche = Calculs.distanceChebyshev(ve.getPoint(), cible.getPoint());
 
-			int refPlusProche = cible.getRef();
-			Element elemPlusProche = cible.getControleur().getElement();
+		int refPlusProche = cible.getRef();
+		Element elemPlusProche = cible.getControleur().getElement();
 
-			// dans la meme equipe ?
-			boolean memeEquipe = false;
+		// dans la meme equipe ?
+		boolean memeEquipe = false;
 
-			if(elemPlusProche instanceof Personnage) {
-				memeEquipe = (this.getLeader() != -1 && this.getLeader() == ((Personnage) elemPlusProche).getLeader()) || // meme leader
-						this.getLeader() == refPlusProche || // cible est le leader de this
-						((Personnage) elemPlusProche).getLeader() == refRMI; // this est le leader de cible
+		if(elemPlusProche instanceof Personnage) {
+			memeEquipe = (this.getLeader() != -1 && this.getLeader() == ((Personnage) elemPlusProche).getLeader()) || // meme leader
+					this.getLeader() == refPlusProche || // cible est le leader de this
+					((Personnage) elemPlusProche).getLeader() == refRMI; // this est le leader de cible
+		}
+
+		if(distPlusProche <= 2)
+		{
+			if(elemPlusProche instanceof Personnage)
+			{
+				Personnage p = (Personnage) elemPlusProche;
+				if (!memeEquipe && (p.getForce() - this.getDefense()) < (this.getForce() - p.getDefense()))
+				{
+					parler("J'attaque plus faible que moi", ve);
+					actions.setInteractionType(Actions.FRAPPER);
+					actions.interaction(ve.getRef(),refPlusProche,ve.getControleur().getArene());
+				}
 			}
-
-			if(distPlusProche <= 2) { // si suffisamment proches
-				if(elemPlusProche instanceof Potion) { // potion
-					// ramassage
-					parler("Je ramasse une potion", ve);
-					actions.ramasser(refRMI, refPlusProche, ve.getControleur().getArene());
-
-				} else { // personnage
-					if(!memeEquipe) { // duel seulement si pas dans la meme equipe (pas de coup d'etat possible dans ce cas)
-						// duel
-						parler("Je fais un duel avec " + refPlusProche, ve);
-						actions.interaction(refRMI, refPlusProche, ve.getControleur().getArene());
-					} else {
-						parler("J'erre...", ve);
-						deplacements.seDirigerVers(0); // errer
-					}
-				}
-			} else { // si voisins, mais plus eloignes
-				if(!memeEquipe) { // potion ou enemmi
-					// je vais vers le plus proche
-					parler("Je vais vers mon voisin " + refPlusProche, ve);
-					deplacements.seDirigerVers(refPlusProche);
-
-				} else {
-					parler("J'erre...", ve);
-					deplacements.seDirigerVers(0); // errer
-				}
+			return;
+		}
+		if(elemPlusProche instanceof Bombe)
+		{
+			parler("Je fuis une bombe !!!", ve);
+			actions.setInteractionType(Actions.FUIR);
+			actions.interaction(ve.getRef(),refPlusProche,ve.getControleur().getArene());
+		}
+		else if(elemPlusProche instanceof Personnage)
+		{
+			Personnage p = (Personnage) elemPlusProche;
+			if (!memeEquipe && (p.getForce() - this.getDefense()) < (this.getForce() - p.getDefense()))
+			{
+				parler("Je vais attaquer plus faible que moi", ve);
+				deplacements.seDirigerVers(refPlusProche);
+			}
+			else if (!memeEquipe)
+			{
+				parler("Je fuis un adversaire trop fort...", ve);
+				actions.setInteractionType(Actions.FUIR);
+				actions.interaction(ve.getRef(),refPlusProche,ve.getControleur().getArene());
+			}
+			else if(refPlusProche == ((Personnage) elemPlusProche).getLeader())
+			{
+				parler("J'aime mon Leader donc je vais le voir !", ve);
+				deplacements.seDirigerVers(refPlusProche);
+			}
+			else
+			{
+				parler("Le coin en haut à gauche est cool !", ve);
+				deplacements.seDirigerVers(new Point(0,0));
 			}
 		}
 	}
