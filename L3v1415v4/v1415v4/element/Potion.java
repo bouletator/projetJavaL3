@@ -8,10 +8,6 @@ public class Potion extends Objet {
 
 	private static final long serialVersionUID = 1L;
 
-	private final int gain;
-	
-
-
 	/**
 	 * Constructeur. Le nombre de vie est par defaut initialise a 200.
 	 *
@@ -19,7 +15,7 @@ public class Potion extends Objet {
 	 */
 	public Potion(String nom, int gainVie) {
 		super(nom);
-		this.gain = gainVie;
+		ajouterCaract("vie",gainVie);
 	}
 
 	/**
@@ -27,7 +23,7 @@ public class Potion extends Objet {
 	 * @return bonus de force
 	 */
 	public int getGain() {
-		return gain;
+		return getCaract("vie");
 	}
 
 	

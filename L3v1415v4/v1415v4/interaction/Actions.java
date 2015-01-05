@@ -119,7 +119,7 @@ public class Actions implements IActions {
 		per.majCaractElement(nouvellesValeursPer);
 		
     	//mets a jour l'etat de la potion comme ramassee (plus de vie)
-    	pot.perdreVie(1);
+    	pot.perdreVie(200);
 	}
 
 	/**

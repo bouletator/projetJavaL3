@@ -20,7 +20,7 @@ public class TestPotionAlea {
 			if (args.length!=0) port=Integer.parseInt(args[0]);
 			String ipArene = "localhost";
 			if (args.length!=0) if (args[1].contentEquals("")) ipArene=args[1];
-			Element anduril = new Potion("Anduril", 50, 50);
+			Element anduril = new Potion("Anduril", 25);
 	
 			Random r = new Random();
 			new Console(anduril, r.nextInt(100),r.nextInt(100), port,ipArene);
