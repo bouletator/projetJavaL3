@@ -143,6 +143,14 @@ public class DuelBasic implements IDuel {
 		}
 
 		//si le personnage meurt alors on l'enlève de tous les personnages de son équipe
-		if (frappe.getElement().getVie() <= 0) frappe.enleverTousPersonnagesEquipe();
+		if (frappe.getElement().getVie() <= 0) {
+			frappe.enleverTousPersonnagesEquipe();
+			//la détermination baisse pour chaque membre de l'équipe
+			for(Integer ref : ((Personnage) frappe.getElement()).getEquipe()){
+				int baseDeter = ((Personnage)arene.consoleFromRef(ref).getElement()).getDetermination();
+				//TODO -10% a mettre dans une constante?
+				((Personnage)arene.consoleFromRef(ref).getElement()).setDetermination(baseDeter-baseDeter/10);
+			}
+		}
 	}
 }
