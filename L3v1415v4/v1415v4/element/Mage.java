@@ -72,7 +72,7 @@ public class Mage extends PoseurObjet {
 		}
 		else if(distPlusProche <=5 && !memeEquipe &&potionNonMiseDernierTour)
 		{
-			//TODO : mettre en place une potion dans la direction de l'adversaire
+			//TODO : mettre en place une potion de mort ou aléatoire dans la direction de l'adversaire
 			potionNonMiseDernierTour = false;
 		}
 		else if(distPlusProche <= 5 && !memeEquipe && !potionNonMiseDernierTour)

@@ -153,7 +153,7 @@ public class Actions implements IActions {
 				else if(interactionType ==FUIR) {
 					duel.realiserFuite();
 				}
-				
+
 				actionExecutee = true;
 		    }
     	}
