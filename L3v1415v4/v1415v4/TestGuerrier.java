@@ -23,7 +23,7 @@ public class TestGuerrier {
 			String ipArene = "localhost";
 			if (args.length!=0) if (args[1].contentEquals("")) ipArene=args[1];
 
-			Personnage bidule = new Personnage("Bidule", 200, 0);
+			Guerrier bidule = new Guerrier("Bidule", 200, 0);
 
 			Random r = new Random();
 			new Console(bidule, r.nextInt(100), r.nextInt(100), port, ipArene);
