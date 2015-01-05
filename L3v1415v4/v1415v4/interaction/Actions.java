@@ -150,8 +150,9 @@ public class Actions implements IActions {
 				else if(interactionType ==CONVERTIR) {
 					duel.realiserConversion();
 				}
-				else if(interactionType ==FUIR){}
+				else if(interactionType ==FUIR) {
 					duel.realiserFuite();
+				}
 				
 				actionExecutee = true;
 		    }
