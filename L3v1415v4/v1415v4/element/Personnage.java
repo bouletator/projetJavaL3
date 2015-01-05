@@ -84,18 +84,34 @@ public class Personnage extends Element implements IPersonnage {
 		return equipe;
 	}
 
+	/**
+	 * Retourne la détermination du personnage
+	 * @return bonus de détermination
+	 */
 	public int getDetermination(){
 		return getCaract("determination");
 	}
 
+	/**
+	 * Retourne la vitesse du personnage
+	 * @return bonus de vitesse
+	 */
 	public int getVitesse(){
 		return getCaract("vitesse");
 	}
 
+	/**
+	 * Retourne la défense du personnage
+	 * @return bonus de défense
+	 */
 	public int getDefense(){
 		return getCaract("defense");
 	}
 
+	/**
+	 * Met à jour la détermination du personnage
+	 * @param determinationEnroleur bonus de détermination du personnage enrôleur
+	 */
 	public void setDetermination(int determinationEnroleur) {
 		ajouterCaract("determination", determinationEnroleur);
 	}
@@ -117,7 +133,7 @@ public class Personnage extends Element implements IPersonnage {
 			}
 		}
 		
-		return super.toString() + "[" + getForce() + ", " + getCharisme() + lead + eq + "]";
+		return super.toString() + "[Vie:"+ super.getVie() +", Att:" + getForce() + ", Char" + getCharisme() + ", Vit" + getVitesse() + ", Def" + getDefense() + ", Det" + getDetermination() + lead + eq + "]";
 	}
 	
 	

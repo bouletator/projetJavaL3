@@ -51,7 +51,11 @@ public class Element implements IElement, Serializable {
 	 * @return valeur correspondant a la caracteristique, ou null si elle n'existe pas
 	 */
 	public Integer getCaract(String c) {
-		return caract.get(c);
+		if(!caract.containsKey(c))
+			return null;
+		if(c.equals("vitesse"))
+			return caract.get(c);
+		return (int)(caract.get(c)*(1-(200-getVie())/100.0));
 	}	
 
 	/** 
