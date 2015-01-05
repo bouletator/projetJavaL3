@@ -279,16 +279,18 @@ public class Arene extends UnicastRemoteObject implements IArene, Runnable {
 	}
 
 	/**
-	 * Liste des reference des voisins (distance inferieure a 10) et leurs coordonnees a partir d'une position
+	 * Liste des reference des voisins (distance inferieure à la vision du personnage) et leurs coordonnees a partir d'une position
 	 */
-	public Hashtable<Integer, VueElement> voisins(Point pos,int ref)
+	public Hashtable<Integer, VueElement> voisins(Point pos,int ref, Element e)
 			throws RemoteException {
 		//Hashtable<Integer, Point> aux=new Hashtable<Integer, Point>();
 		
 		Hashtable<Integer,VueElement> aux = new Hashtable<Integer, VueElement>();
-		
+
+		int vision = ((Personnage) e).getVision();
+
 		for(VueElement s : elements.values()) {
-			if (((Calculs.distanceChebyshev(s.getPoint(), pos))<((Personnage) s.getControleur().getElement()).getVision()) & (s.getRef()!=ref)) {
+			if (((Calculs.distanceChebyshev(s.getPoint(), pos))<vision) & (s.getRef()!=ref)) {
 				aux.put(s.getRef(), s);
 			}
 		}

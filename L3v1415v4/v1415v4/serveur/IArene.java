@@ -1,5 +1,6 @@
 package serveur;
 
+import element.Element;
 import interfaceGraphique.VueElement;
 
 import java.awt.Point;
@@ -48,7 +49,7 @@ public interface IArene extends Remote {
 	 * Liste les voisins (representations d'element) d'une coordonnee dans l'arene sous la forme de couples (reference,coordonnees) dans une Hashtable
 	 * @throws RemoteException
 	 */
-	public Hashtable<Integer, VueElement> voisins(Point pos, int ref) throws RemoteException;
+	public Hashtable<Integer, VueElement> voisins(Point pos, int ref, Element e) throws RemoteException;
 
 	public int getPort() throws RemoteException;
 	
