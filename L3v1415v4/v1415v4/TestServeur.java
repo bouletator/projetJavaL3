@@ -46,7 +46,7 @@ public class TestServeur {
 		    	arene.printElements();
 		    	
 		    	try {
-		    		Thread.sleep(1000); // delai = 1 seconde
+		    		Thread.sleep(200); // delai = 1 seconde
 		    	} catch (InterruptedException e) {
 		    		e.printStackTrace();
 		    	}

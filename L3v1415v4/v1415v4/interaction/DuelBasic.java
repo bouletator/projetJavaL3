@@ -136,7 +136,7 @@ public class DuelBasic implements IDuel {
 		System.out.println(per.getRefRMI() + " tue " + tue.getRefRMI());
 		
 		tue.enleverTousPersonnagesEquipe();
-		tue.perdreVie(1);
+		tue.perdreVie(per.getElement().getCaract("force"));
 	}
 
 }
