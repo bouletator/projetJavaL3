@@ -4,42 +4,36 @@ package element;
  * Une potion: un element donnant des bonus aux caracteristiques de celui qui
  * le ramasse.
  */
-public class Potion extends Element {
+public class Potion extends Objet {
 
 	private static final long serialVersionUID = 1L;
+
+	private final int gain;
 	
+
+
 	/**
-	 * Constructeur d'une potion avec un nom et une quantite de force et de charisme
-	 * (ces quantites sont celles ajoutees lorsqu'un Personnage ramasse cette potion).
-	 * @param nom Nom de la potion
-	 * @param force Quantité de force de la potion
-	 * @param charisme Quantité de charisme
+	 * Constructeur. Le nombre de vie est par defaut initialise a 200.
+	 *
+	 * @param nom le nom de l'element a creer
 	 */
-	public Potion(String nom, int force, int charisme) {
+	public Potion(String nom, int gainVie) {
 		super(nom);
-		ajouterCaract("force", force);
-		ajouterCaract("charisme", charisme);
-	} 
-	
+		this.gain = gainVie;
+	}
+
 	/**
 	 * Retourne la valeur du bonus de force.
 	 * @return bonus de force
 	 */
-	public int getForce() {
-		return getCaract("force");
+	public int getGain() {
+		return gain;
 	}
-	
-	/**
-	 * Retourne la valeur du bonus de charisme.
-	 * @return bonus de charisme
-	 */
-	public int getCharisme() {
-		return getCaract("charisme");
-	}
+
 	
 
 	@Override
 	public String toString(){
-		return super.toString() + "[" + getForce() + ", " + getCharisme() + "]";
+		return super.toString() + "[" + getGain() + "]";
 	}
 }

@@ -25,7 +25,7 @@ public class Element implements IElement, Serializable {
 	protected Hashtable<String, Integer> caract = new Hashtable<String,Integer>();
 	
 	/**
-	 * Constructeur. Le nombre de vie est par defaut initialise a 1.
+	 * Constructeur. Le nombre de vie est par defaut initialise a 200.
 	 * @param nom le nom de l'element a creer
 	 */
 	public Element(String nom) {		
