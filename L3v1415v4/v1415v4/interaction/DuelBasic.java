@@ -1,6 +1,7 @@
 package interaction;
 
 
+import java.awt.*;
 import java.rmi.RemoteException;
 
 import serveur.IArene;
@@ -93,11 +94,13 @@ public class DuelBasic implements IDuel {
 
 	/**
 	 * Effectue les actions lorsqu'un personnage fuit un autre.
-	 * @param per personnage qui fuit
 	 * @param danger ce qui est dangeureux
 	 */
-	public void realiserFuite(IConsole per, IConsole danger) throws RemoteException {
+	public void realiserFuite() throws RemoteException {
 		System.out.print("Tentative de fuire " + defenseur.getRefRMI() + " par " + attaquant.getRefRMI() + " : ");
+
+		// fuite
+		fuir(attaquant,defenseur);
 
 	}
 
@@ -162,6 +165,25 @@ public class DuelBasic implements IDuel {
 				((Personnage)arene.consoleFromRef(ref).getElement()).setDetermination(baseDeter-baseDeter/10);
 			}
 		}
+	}
+
+	private void fuir(IConsole per, IConsole dan) throws RemoteException {
+		Deplacements deplacements = new Deplacements(per.getVueElement(), arene.voisins(per.getVueElement().getPoint(), per.getRefRMI()));
+
+
+
+		//Position du danger
+		Point danPos = dan.getVueElement().getPoint();
+		//Position du perso
+		Point perPos = per.getVueElement().getPoint();
+
+		//nouvelle direction
+		Point newDir = new Point();
+		newDir.setLocation((perPos.getX()-danPos.getX()),(perPos.getY()-danPos.getY()));
+
+
+		deplacements.seDirigerVers(newDir);
+
 	}
 
 }
