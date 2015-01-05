@@ -40,10 +40,13 @@ public class Personnage extends Element implements IPersonnage {
 	 * @param force Quantité de Force du personnage
 	 * @param charisme Quantité de Charisme du personnage
 	 */
-	public Personnage(String nom, int force, int charisme) {
+	public Personnage(String nom, int force, int charisme, int defense, int determination, int vitesse) {
 		super(nom);
 		ajouterCaract("force", force);
 		ajouterCaract("charisme", charisme);
+		ajouterCaract("determination", determination);
+		ajouterCaract("defense", defense);
+		ajouterCaract("vitesse", vitesse);
 
 		leader = -1;
 		equipe = new ArrayList<Integer>();
@@ -80,7 +83,22 @@ public class Personnage extends Element implements IPersonnage {
 	public ArrayList<Integer> getEquipe() {
 		return equipe;
 	}
-	
+
+	public int getDetermination(){
+		return getCaract("determination");
+	}
+
+	public int getVitesse(){
+		return getCaract("vitesse");
+	}
+
+	public int getDefense(){
+		return getCaract("defense");
+	}
+
+	public void setDetermination(int determinationEnroleur) {
+		ajouterCaract("determination", determinationEnroleur);
+	}
 
 	@Override
 	public String toString(){
