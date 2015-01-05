@@ -46,16 +46,16 @@ public class DuelBasic implements IDuel {
 	public boolean isLeader(IConsole per1, IConsole per2) throws RemoteException {
 		return ((Personnage) per2.getElement()).getLeader() == per1.getRefRMI();
 	}
+
+	public void realiserConversion(){
+
+	}
 	
 	@Override
 	public void realiserCombat() throws RemoteException {
 		Personnage pAtt = (Personnage) attaquant.getElement();
 		Personnage pDef = (Personnage) defenseur.getElement();
-	
-		int attCharisme = pAtt.getCharisme();
-		int attForce = pAtt.getForce();
-		int defCharisme = pDef.getCharisme();
-		int defForce = pDef.getForce();
+
 	
 		System.out.print("Duel entre " + attaquant.getRefRMI() + " et " + defenseur.getRefRMI() + " : ");
 	
@@ -64,38 +64,22 @@ public class DuelBasic implements IDuel {
 				// s'ils ont le meme leader ou que le defenseur est dans l'equipe de l'attaquant, rien ne se passe
 				System.out.println("Rien ne se passe");
 				
-			} else if (isLeader(defenseur, attaquant)) {
+			/*} else if (isLeader(defenseur, attaquant)) {
 				if(attCharisme > defCharisme) {
 					// coup d'etat
 					System.out.println(attaquant.getRefRMI() + " realise un coup d'etat contre " + defenseur.getRefRMI());
 				} else {
 					// coup d'etat echoue
 					System.out.println("Rien ne se passe");
-				}
+				}*/
 				
 			} else {
 				// duel
-				if(attCharisme > defForce) {
-					// def dans l'equipe de att
-					ajouterEquipe(attaquant, defenseur);
-					
-				} else if(attForce >= defCharisme) {
 					// def frappe par att
-					frappe(attaquant, defenseur);
-					
-				} else {
-					
-					if(defCharisme > defForce) {
-						// att dans l'equipe de def
-						ajouterEquipe(defenseur, attaquant);
-						
-					} else {
-						// att tue par def
-						frappe(defenseur, attaquant);
-					}
-					
-				}
+					frapper(attaquant, defenseur);
 			}
+					
+
 		} catch (RemoteException e) {
 			System.out.println("Erreur lors d'un duel :");
 			e.printStackTrace();
@@ -107,7 +91,7 @@ public class DuelBasic implements IDuel {
 	 * @param per personnage qui a ajoute a son equipe (ou celle de son leader)
 	 * @param eq personnage a ajouter a l'equipe
 	 */
-	private void ajouterEquipe(IConsole per, IConsole eq) throws RemoteException {
+	private void convertir(IConsole per, IConsole eq) throws RemoteException {
 		int leader = ((Personnage) per.getElement()).getLeader(); // ajouter au leader s'il y en a un
 
 		//le personnage reçoit la determination de son enroleur
@@ -133,7 +117,7 @@ public class DuelBasic implements IDuel {
 	 * @param per personnage qui tue
 	 * @param frappe personnage tue
 	 */
-	private void frappe(IConsole per, IConsole frappe) throws RemoteException {
+	private void frapper(IConsole per, IConsole frappe) throws RemoteException {
 		//annonce de la frappe
 		per.getElement().parler("Je frappe " + frappe.getRefRMI(), per.getVueElement());
 		System.out.println(per.getRefRMI() + " frappe " + frappe.getRefRMI());

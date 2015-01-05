@@ -125,7 +125,8 @@ public class Actions implements IActions {
 		    // si les deux sont vivants (ils peuvent etre presents mais sans vie)
 		    if(attaquant.getElement().getVie() > 0 && defenseur.getElement().getVie() > 0) { 
 			    DuelBasic duel = new DuelBasic(arene, attaquant, defenseur);
-				
+
+
 				duel.realiserCombat(); 
 				
 				actionExecutee = true;
