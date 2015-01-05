@@ -15,6 +15,7 @@ import controle.IConsole;
  */
 public class Actions implements IActions {
 
+
 	/**
 	 * Vue de l'element (pour l'interface graphique).
 	 */
@@ -28,7 +29,24 @@ public class Actions implements IActions {
      */
     private boolean actionExecutee;
 
-    public Actions(VueElement ve, Hashtable<Integer, VueElement> voisins) {
+	/**
+	 * Détermine le choix de l'action
+	 */
+	private int actionType;
+	/**
+	 * Choix de l'action : Frapper
+	 */
+	public static final int FRAPPER = 0;
+	/**
+	 * Choix de l'action : Convertir
+	 */
+	public static final int CONVERTIR = 1;
+	/**
+	 * Choix de l'action : Fuir
+	 */
+	public static final int FUIR = 2;
+
+	public Actions(VueElement ve, Hashtable<Integer, VueElement> voisins) {
         this.ve = ve;
         
         if (voisins == null) {
@@ -108,7 +126,7 @@ public class Actions implements IActions {
 	 * Appele par le run de la console. Permet a l'attaquant (ref1) d'attaquer (executer une frappe) le defenseur (ref2).
 	 * Les regles de combat s'appliquent (en fonction de la force, de la defense et de l'esquive).
 	 * Les caracteristiques du defenseur sont mises a jour (pas d'impact sur attaquant)
-	 * Les deux protagonistes ajoutent leur adversaire dans les elements deja vus. 
+	 * Les deux protagonistes ajoutent leur adversaire dans les elements deja vus.
 	 * @param ref1 attaquant
 	 * @param ref2 defenseur
 	 * @param arene arene
@@ -126,14 +144,23 @@ public class Actions implements IActions {
 		    if(attaquant.getElement().getVie() > 0 && defenseur.getElement().getVie() > 0) { 
 			    DuelBasic duel = new DuelBasic(arene, attaquant, defenseur);
 
-				// TODO BRUTES!
-				duel.realiserCombat(); 
+				if(actionType==FRAPPER) {
+					duel.realiserCombat();
+				}
+				else if(actionType==CONVERTIR) {
+					duel.realiserConversion();
+				}
+				else if(actionType==FUIR){}
+					//
 				
 				actionExecutee = true;
 		    }
     	}
 	}
 
+	public void setActionType(int type){
+		actionType=type;
+	}
 
 
 	public Hashtable<Integer,VueElement> getVoisins() {
