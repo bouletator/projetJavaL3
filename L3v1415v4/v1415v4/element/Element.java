@@ -30,7 +30,7 @@ public class Element implements IElement, Serializable {
 	 */
 	public Element(String nom) {		
 		this.nom = nom;
-		caract.put("vie", 1000);
+		caract.put("vie", 200);
 	}
 
 	public String getNom() {
@@ -53,7 +53,7 @@ public class Element implements IElement, Serializable {
 	public Integer getCaract(String c) {
 		if(!caract.containsKey(c))
 			return null;
-		if(c.equals("vitesse"))
+		if(c.equals("vitesse") || c.equals("vision"))
 			return caract.get(c);
 		return (int)(caract.get(c)*(1-(200-getVie())/100.0));
 	}	

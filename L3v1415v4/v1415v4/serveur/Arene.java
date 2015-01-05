@@ -288,7 +288,7 @@ public class Arene extends UnicastRemoteObject implements IArene, Runnable {
 		Hashtable<Integer,VueElement> aux = new Hashtable<Integer, VueElement>();
 		
 		for(VueElement s : elements.values()) {
-			if (((Calculs.distanceChebyshev(s.getPoint(), pos))<10) & (s.getRef()!=ref)) {
+			if (((Calculs.distanceChebyshev(s.getPoint(), pos))<((Personnage) s.getControleur().getElement()).getVision()) & (s.getRef()!=ref)) {
 				aux.put(s.getRef(), s);
 			}
 		}
