@@ -1,5 +1,5 @@
 import controle.Console;
-import element.Personnage;
+import element.Guerrier;
 
 import java.rmi.RemoteException;
 import java.util.Random;
@@ -23,7 +23,7 @@ public class TestGuerrier {
 			String ipArene = "localhost";
 			if (args.length!=0) if (args[1].contentEquals("")) ipArene=args[1];
 
-			Guerrier bidule = new Guerrier("Bidule", 90, 0);
+			Guerrier bidule = new Guerrier("Bidule", 90, 0,20,90,1,1);
 
 			Random r = new Random();
 			new Console(bidule, r.nextInt(100), r.nextInt(100), port, ipArene);

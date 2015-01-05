@@ -39,15 +39,19 @@ public class Personnage extends Element implements IPersonnage {
 	 * @param nom Nom du personnage
 	 * @param force Quantité de Force du personnage
 	 * @param charisme Quantité de Charisme du personnage
+	 * @param defense Quantité de Défense du personnage
+	 * @param determination Quantité de Détermination du personnage
+	 * @param vitesse Quantité de vitesse du personnage
+	 * @param vision Portée de la vision du personnage
 	 */
-	public Personnage(String nom, int force, int charisme, int defense, int determination, int vitesse) {
+	public Personnage(String nom, int force, int charisme, int defense, int determination, int vitesse, int vision) {
 		super(nom);
 		ajouterCaract("force", force);
 		ajouterCaract("charisme", charisme);
 		ajouterCaract("determination", determination);
 		ajouterCaract("defense", defense);
 		ajouterCaract("vitesse", vitesse);
-
+		ajouterCaract("vision", vision);
 		leader = -1;
 		equipe = new ArrayList<Integer>();
 	}
@@ -108,6 +112,13 @@ public class Personnage extends Element implements IPersonnage {
 		return getCaract("defense");
 	}
 
+	/***
+	 * Retourne la portée de la vision du personnage
+	 * @return portée de vision
+	 */
+	public int getVision(){
+		return getCaract("vision");
+	}
 	/**
 	 * Met à jour la détermination du personnage
 	 * @param determinationEnroleur bonus de détermination du personnage enrôleur
@@ -133,7 +144,7 @@ public class Personnage extends Element implements IPersonnage {
 			}
 		}
 		
-		return super.toString() + "[Vie:"+ super.getVie() +", Att:" + getForce() + ", Char:" + getCharisme() + ", Vit:" + getVitesse() + ", Def:" + getDefense() + ", Det:" + getDetermination() + lead + eq + "]";
+		return super.toString() + "[Vie:"+ super.getVie() +", Att:" + getForce() + ", Char:" + getCharisme() + ", Vit:" + getVitesse() + ", Def:" + getDefense() + ", Det:" + getDetermination()  + ", Vue:" + getVision() + lead + eq + "]";
 	}
 	
 	
