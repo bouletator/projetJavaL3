@@ -25,7 +25,7 @@ public class TestPersonnageCentre {
 			String ipArene = "localhost";
 			if (args.length!=0) if (args[1].contentEquals("")) ipArene=args[1];
 			
-			Personnage bidule = new Personnage("Bidule", 200, 100);
+			Personnage bidule = new Personnage("Bidule", 200, 100,10,1,1);
 			
 			new Console(bidule, 40, 40, port, ipArene);
 		} catch (RemoteException e) {

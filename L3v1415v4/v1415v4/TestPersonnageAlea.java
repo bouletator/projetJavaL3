@@ -24,7 +24,7 @@ public class TestPersonnageAlea {
 			String ipArene = "localhost";
 			if(args.length != 0) if(args[1].contentEquals("")) ipArene = args[1];
 	
-			Personnage bidule = new Personnage("Truc", 100, 200);
+			Personnage bidule = new Personnage("Truc", 100, 200,10,1,1);
 			Random r = new Random();
 			new Console(bidule, r.nextInt(100), r.nextInt(100), port, ipArene);
 		} catch (RemoteException e) {

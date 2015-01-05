@@ -30,7 +30,7 @@ public class Element implements IElement, Serializable {
 	 */
 	public Element(String nom) {		
 		this.nom = nom;
-		caract.put("vie", 1000);
+		caract.put("vie", 200);
 	}
 
 	public String getNom() {

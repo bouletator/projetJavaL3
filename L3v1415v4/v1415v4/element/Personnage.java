@@ -133,7 +133,7 @@ public class Personnage extends Element implements IPersonnage {
 			}
 		}
 		
-		return super.toString() + "[Vie:"+ super.getVie() +", Att:" + getForce() + ", Char" + getCharisme() + ", Vit" + getVitesse() + ", Def" + getDefense() + ", Det" + getDetermination() + lead + eq + "]";
+		return super.toString() + "[Vie:"+ super.getVie() +", Att:" + getForce() + ", Char:" + getCharisme() + ", Vit:" + getVitesse() + ", Def:" + getDefense() + ", Det:" + getDetermination() + lead + eq + "]";
 	}
 	
 	
