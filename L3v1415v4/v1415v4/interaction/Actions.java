@@ -32,7 +32,7 @@ public class Actions implements IActions {
 	/**
 	 * Détermine le choix de l'action
 	 */
-	private int actionType;
+	private int interactionType;
 	/**
 	 * Choix de l'action : Frapper
 	 */
@@ -144,22 +144,22 @@ public class Actions implements IActions {
 		    if(attaquant.getElement().getVie() > 0 && defenseur.getElement().getVie() > 0) { 
 			    DuelBasic duel = new DuelBasic(arene, attaquant, defenseur);
 
-				if(actionType==FRAPPER) {
+				if(interactionType ==FRAPPER) {
 					duel.realiserCombat();
 				}
-				else if(actionType==CONVERTIR) {
+				else if(interactionType ==CONVERTIR) {
 					duel.realiserConversion();
 				}
-				else if(actionType==FUIR){}
-					//
+				else if(interactionType ==FUIR){}
+					duel.realiserFuite();
 				
 				actionExecutee = true;
 		    }
     	}
 	}
 
-	public void setActionType(int type){
-		actionType=type;
+	public void setInteractionType(int type){
+		interactionType =type;
 	}
 
 

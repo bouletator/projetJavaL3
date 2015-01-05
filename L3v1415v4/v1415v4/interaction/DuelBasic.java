@@ -57,7 +57,7 @@ public class DuelBasic implements IDuel {
 			System.out.println("Rien ne se passe");
 
 			} else {
-				// attaque
+				// tentative de conversion
 				convertir(attaquant, defenseur);
 			}
 
@@ -89,6 +89,16 @@ public class DuelBasic implements IDuel {
 			System.out.println("Erreur lors d'un duel :");
 			e.printStackTrace();
 		}
+	}
+
+	/**
+	 * Effectue les actions lorsqu'un personnage fuit un autre.
+	 * @param per personnage qui fuit
+	 * @param danger ce qui est dangeureux
+	 */
+	public void realiserFuite(IConsole per, IConsole danger) throws RemoteException {
+		System.out.print("Tentative de fuire " + defenseur.getRefRMI() + " par " + attaquant.getRefRMI() + " : ");
+
 	}
 
 	/**
@@ -127,8 +137,8 @@ public class DuelBasic implements IDuel {
 
 	/**
 	 * Effectue les actions lorsqu'un personnage tue un autre.
-	 * @param per personnage qui tue
-	 * @param frappe personnage tue
+	 * @param per personnage qui frappe
+	 * @param frappe personnage frappe
 	 */
 	private void frapper(IConsole per, IConsole frappe) throws RemoteException {
 		//annonce de la frappe
@@ -153,4 +163,5 @@ public class DuelBasic implements IDuel {
 			}
 		}
 	}
+
 }
