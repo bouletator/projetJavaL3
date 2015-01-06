@@ -24,7 +24,7 @@ public class TestPoseurMur {
 			String ipArene = "localhost";
 			if (args.length!=0) if (args[1].contentEquals("")) ipArene=args[1];
 
-			PoseurMur bidule = new PoseurMur("Bidule", 90, 0,20,90,1,10,1);
+			PoseurMur bidule = new PoseurMur("PoseurDeMur", 90, 0,20,90,1,10,1);
 			bidule.ajouterMur(new Mur("invincible"));
 			bidule.ajouterMur(new Mur("rempart de Troyes"));
 			Random r = new Random();
