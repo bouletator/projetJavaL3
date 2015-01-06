@@ -26,7 +26,7 @@ public class TestEclaireur {
 			Eclaireur bidule = new Eclaireur("Eclaireur", 90, 0,20,90,3,25);
 
 			Random r = new Random();
-			new Console(bidule,50, 50, port, ipArene);
+			new Console(bidule,r.nextInt(100), r.nextInt(100), port, ipArene);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}

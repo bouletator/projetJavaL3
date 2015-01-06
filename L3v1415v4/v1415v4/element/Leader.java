@@ -65,6 +65,7 @@ public class Leader extends Personnage {
                     if(!memeEquipe) { // duel seulement si pas dans la meme equipe (pas de coup d'etat possible dans ce cas)
                         // duel
                         parler("Je fais un duel avec " + refPlusProche, ve);
+                        actions.setInteractionType(Actions.CONVERTIR);
                         actions.interaction(refRMI, refPlusProche, ve.getControleur().getArene());
                     } else {
                         parler("J'erre...", ve);

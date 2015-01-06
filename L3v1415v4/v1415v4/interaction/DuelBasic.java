@@ -97,7 +97,7 @@ public class DuelBasic implements IDuel {
 	 * @param danger ce qui est dangeureux
 	 */
 	public void realiserFuite() throws RemoteException {
-		System.out.print("Tentative de fuire " + defenseur.getRefRMI() + " par " + attaquant.getRefRMI() + " : ");
+		System.out.println("Tentative de fuire " + defenseur.getRefRMI() + " par " + attaquant.getRefRMI() + " : ");
 
 		// fuite
 		fuir(attaquant,defenseur);
