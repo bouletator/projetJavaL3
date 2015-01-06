@@ -23,10 +23,10 @@ public class TestEclaireur {
 			String ipArene = "localhost";
 			if (args.length!=0) if (args[1].contentEquals("")) ipArene=args[1];
 
-			Eclaireur bidule = new Eclaireur("Eclaireur", 90, 0,20,90,1,25);
+			Eclaireur bidule = new Eclaireur("Eclaireur", 90, 0,20,90,3,25);
 
 			Random r = new Random();
-			new Console(bidule, r.nextInt(100), r.nextInt(100), port, ipArene);
+			new Console(bidule,50, 50, port, ipArene);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
