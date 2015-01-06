@@ -47,6 +47,17 @@ public class Actions implements IActions {
 	 */
 	public static final int FUIR = 2;
 
+	/**
+	 * Deplacements de cette action
+	 */
+	private Deplacements deplacements;
+
+	/**
+	 *
+	 * @param ve
+	 * @param voisins
+	 */
+
 	public Actions(VueElement ve, Hashtable<Integer, VueElement> voisins) {
         this.ve = ve;
         
@@ -144,7 +155,7 @@ public class Actions implements IActions {
 					duel.realiserConversion();
 				}
 				else if(interactionType ==FUIR) {
-					duel.realiserFuite();
+					duel.realiserFuite(deplacements);
 				}
 
 				actionExecutee = true;
@@ -184,7 +195,10 @@ public class Actions implements IActions {
 
 	public VueElement getVe() {
 		return ve;
-	}	
-	
-	
+	}
+
+
+	public void setDeplacements(Deplacements deplacements) {
+		this.deplacements = deplacements;
+	}
 }

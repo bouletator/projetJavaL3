@@ -150,7 +150,7 @@ public class Deplacements implements IDeplacements {
                 --i;
             }
 
-
+	        
 	        actionExecutee = true;
     	}
     }

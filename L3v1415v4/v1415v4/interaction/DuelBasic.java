@@ -94,13 +94,12 @@ public class DuelBasic implements IDuel {
 
 	/**
 	 * Effectue les actions lorsqu'un personnage fuit un autre.
-	 * @param danger ce qui est dangeureux
 	 */
-	public void realiserFuite() throws RemoteException {
-		System.out.println("Tentative de fuire " + defenseur.getRefRMI() + " par " + attaquant.getRefRMI() + " : ");
+	public void realiserFuite(Deplacements deplacements) throws RemoteException {
+		System.out.println("Tentative de fuir " + defenseur.getRefRMI() + " par " + attaquant.getRefRMI() + " : ");
 
 		// fuite
-		fuir(attaquant,defenseur);
+		fuir(attaquant,defenseur, deplacements);
 
 	}
 
@@ -167,9 +166,8 @@ public class DuelBasic implements IDuel {
 		}
 	}
 
-	private void fuir(IConsole per, IConsole dan) throws RemoteException {
-		Deplacements deplacements = new Deplacements(per.getVueElement(), arene.voisins(per.getVueElement().getPoint(), per.getRefRMI()));
-
+	private void fuir(IConsole per, IConsole dan, Deplacements deplacements) throws RemoteException {
+		Point newDir = new Point();
 
 
 		//Position du danger
@@ -178,9 +176,7 @@ public class DuelBasic implements IDuel {
 		Point perPos = per.getVueElement().getPoint();
 
 		//nouvelle direction
-		Point newDir = new Point();
-		newDir.setLocation((perPos.getX()-danPos.getX()),(perPos.getY()-danPos.getY()));
-
+		newDir.setLocation(perPos.getX()-danPos.getX(), perPos.getY()-danPos.getY());
 
 		deplacements.seDirigerVers(newDir);
 

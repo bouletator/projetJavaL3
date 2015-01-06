@@ -43,6 +43,7 @@ public class Eclaireur	extends Personnage {
 		Actions actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
 		Deplacements deplacements = new Deplacements(ve,voisins);
 
+
 		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
 			parler("J'erre...", ve);
 			deplacements.seDirigerVers(0); //errer
@@ -83,6 +84,7 @@ public class Eclaireur	extends Personnage {
 		{
 			parler("Je fuis une bombe !!!", ve);
 			actions.setInteractionType(Actions.FUIR);
+			actions.setDeplacements(deplacements);
 			actions.interaction(ve.getRef(),refPlusProche,ve.getControleur().getArene());
 		}
 		else if(elemPlusProche instanceof Personnage)
@@ -97,6 +99,7 @@ public class Eclaireur	extends Personnage {
 			{
 				parler("Je fuis un adversaire trop fort...", ve);
 				actions.setInteractionType(Actions.FUIR);
+				actions.setDeplacements(deplacements);
 				actions.interaction(ve.getRef(),refPlusProche,ve.getControleur().getArene());
 			}
 			else if(refPlusProche == ((Personnage) elemPlusProche).getLeader())
