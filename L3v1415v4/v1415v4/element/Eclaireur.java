@@ -110,5 +110,10 @@ public class Eclaireur	extends Personnage {
 				deplacements.seDirigerVers(new Point(0,0));
 			}
 		}
+		else
+		{
+			parler("Le coin en haut à gauche est cool !", ve);
+			deplacements.seDirigerVers(new Point(0,0));
+		}
 	}
 }
