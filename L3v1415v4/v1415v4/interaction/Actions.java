@@ -1,5 +1,7 @@
 package interaction;
 
+import controle.Console;
+import element.Objet;
 import interfaceGraphique.VueElement;
 
 import java.rmi.RemoteException;
@@ -99,25 +101,17 @@ public class Actions implements IActions {
 	private void ramasserPotion(IConsole pot, IConsole per) throws RemoteException {
 		Hashtable<String, Integer> nouvellesValeursPer = new Hashtable<String, Integer>();
 		Hashtable<String, Integer> valeursPot = pot.getElement().getCaract();
-		
-		Enumeration<String> enumCaract = valeursPot.keys();
-		
-		while (enumCaract.hasMoreElements()) {
-			String s = enumCaract.nextElement();
-			Integer val = per.getElement().getCaract(s);
-			
-			if (val != null) {
-				nouvellesValeursPer.put(s, val + valeursPot.get(s));
-			}
-			
-			//valeursPot.put(s, 0); //on vide toute la potion, meme si elle ne correspond pas aux caract. du perso ?
-			
-			//pot.majCaractElement(valeursPot);
+
+		if(per.getElement().getVie() + valeursPot.get("vie") > 200)
+		{
+			nouvellesValeursPer.put("vie", 200);
 		}
-		
-		// mise a jour du personnage
+		else
+		{
+			nouvellesValeursPer.put("vie", per.getElement().getVie() + valeursPot.get("vie"));
+		}
+
 		per.majCaractElement(nouvellesValeursPer);
-		
     	//mets a jour l'etat de la potion comme ramassee (plus de vie)
     	pot.perdreVie(200);
 	}
@@ -157,6 +151,19 @@ public class Actions implements IActions {
 				actionExecutee = true;
 		    }
     	}
+	}
+
+	public void poserObjet(Objet o,int x, int y, IArene a) throws RemoteException
+	{
+		if(actionExecutee)
+		{
+			System.err.println("Une action a deja ete executee pendant ce tour !");
+		}
+		else
+		{
+			new Console(o,x,y,a.getPort(),"localhost");
+			actionExecutee = true;
+		}
 	}
 
 	public void setInteractionType(int type){

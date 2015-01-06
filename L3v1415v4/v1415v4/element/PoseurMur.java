@@ -73,9 +73,10 @@ public class PoseurMur extends PoseurObjet {
 
 			}
 		}
-		else if(distPlusProche <=5)
+		else if(distPlusProche <=5 && !memeEquipe)
 		{
 			//TODO : mettre en place un mur dans la direction de l'adversaire
+			actions.poserObjet(this.getPremierObjet(),10,10,ve.getControleur().getArene());
 
 		}
 		else

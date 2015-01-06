@@ -55,7 +55,7 @@ public class Element implements IElement, Serializable {
 			return null;
 		if(c.equals("vitesse") || c.equals("vision"))
 			return caract.get(c);
-		return (int)(caract.get(c)*(1-(200-getVie())/100.0));
+		return (int)(caract.get(c)*(1-(200-getVie())/200.0));
 	}	
 
 	/** 
