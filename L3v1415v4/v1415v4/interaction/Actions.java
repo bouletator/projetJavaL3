@@ -5,7 +5,6 @@ import element.Objet;
 import interfaceGraphique.VueElement;
 
 import java.rmi.RemoteException;
-import java.util.Enumeration;
 import java.util.Hashtable;
 
 import serveur.IArene;
