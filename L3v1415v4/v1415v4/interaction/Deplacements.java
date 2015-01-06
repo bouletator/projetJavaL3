@@ -119,6 +119,8 @@ public class Deplacements implements IDeplacements {
                 e.printStackTrace();
             }
 
+            System.out.println("VE_avant:"+ve.getPoint());
+
             while(i > 0)
             {
                 //calcule la direction pour atteindre la ref (+1/-1 par rapport a la position courante)
@@ -150,7 +152,7 @@ public class Deplacements implements IDeplacements {
                 --i;
             }
 
-	        
+            System.out.println("VE_après:"+ve.getPoint());
 	        actionExecutee = true;
     	}
     }
