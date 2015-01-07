@@ -76,7 +76,7 @@ public class JeTeVois extends Personnage {
 					Personnage adversaire = (Personnage) elemPlusProche;
 					if(isDanger(adversaire))
 					{
-						fuir(ve, cible, deplacements);
+						fuir(ve, cible);
 					}
 					else if(!memeEquipe && adversaire.getLeader() == -1 && (adversaire.getEquipe().size()) > this.getEquipe().size()) { // on cherche à se faire convertir par l'autre leader si son équipe est plus grande
 						// duel
@@ -102,7 +102,7 @@ public class JeTeVois extends Personnage {
 				else if(cible.getControleur().getElement() instanceof Personnage && isDanger((Personnage)cible.getControleur().getElement()))
 				{
 					parler("Je fuis un danger",ve);
-					fuir(ve, cible, deplacements);
+					fuir(ve, cible);
 				}
 				else if(cible.getControleur().getElement() instanceof Potion && isBonnePotion(cible.getControleur().getElement()))
 				{
