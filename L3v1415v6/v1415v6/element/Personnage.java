@@ -335,7 +335,7 @@ public class Personnage extends Element implements IPersonnage {
 
 
 
-	protected void fuir(VueElement ve, VueElement veDanger) {
+	protected void fuir(VueElement ve, VueElement veDanger, Deplacements deplacements) {
 		int x=ve.getPoint().x, y=ve.getPoint().y;
 		int xDan=veDanger.getPoint().x, yDan=veDanger.getPoint().y;
 
@@ -344,7 +344,7 @@ public class Personnage extends Element implements IPersonnage {
 		//nouvelle direction
 		newDir.setLocation(x-xDan, y-yDan);
 
-		this.deplacements.seDirigerVers(newDir);
+		deplacements.seDirigerVers(newDir);
 	}
 
 	protected void convertir(VueElement per, VueElement targetVe) {
@@ -420,7 +420,7 @@ public class Personnage extends Element implements IPersonnage {
 		}
 
 		//Si tous les leaders ont la même taille d'équipe
-		if(bestLeader != null)
+		if(bestLeader == null)
 			//Tant pis
 			return 0;
 			//Sinon on renvoie la référence de celui qui a la plus grande équipe
