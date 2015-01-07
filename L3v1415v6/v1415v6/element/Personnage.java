@@ -317,7 +317,7 @@ public class Personnage extends Element implements IPersonnage {
 
 
 		//si c'est un autre type de potion
-		return false;
+		return true;
 	}
 
 	protected boolean isDanger(Personnage personnage) {

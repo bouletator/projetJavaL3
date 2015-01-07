@@ -133,12 +133,12 @@ public class JeTeVois extends Personnage {
 	protected boolean isBonnePotion(Element element) {
 		Potion potion = (Potion) element;
 
-		if(super.isBonnePotion(element))return true;
+		if(!super.isBonnePotion(element))return false;
 
 		///On ne se soucie pas de la force
 
 		// limite: defense maximale à perdre en prenant une potion
-		final int DEFENSE_MAX_LOSS = 15;
+		final int DEFENSE_MAX_LOSS = -15;
 
 		//si la potion diminue la vitesse ou le charisme ou trop de defense on ne la prend pas
 		if (potion.getVitesse() < 0
@@ -177,6 +177,6 @@ public class JeTeVois extends Personnage {
 			return false;
 
 		//TODO Cas de base
-		return false;
+		return true;
 	}
 }
