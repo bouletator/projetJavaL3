@@ -68,7 +68,7 @@ public class JeTeVois extends Personnage {
 			if(distPlusProche <= 2) { // si suffisamment proches
 				if(elemPlusProche instanceof Potion) { // potion
 					// ramassage
-
+					System.out.println("Je vais chercher une potion");
 					if(isBonnePotion(elemPlusProche)) {
 						parler("Je ramasse une potion", ve);
 						actions.ramasser(refRMI, refPlusProche, ve.getControleur().getArene());
@@ -76,53 +76,63 @@ public class JeTeVois extends Personnage {
 
 				} else { // personnage
 					Personnage adversaire = (Personnage) elemPlusProche;
+					System.out.println("Il y a un personnage pas loin");
 					if(isDanger(adversaire))
 					{
+						System.out.println("Je fuis un danger");
 						parler("Je fuis plus fort que moi !!", ve);
 						fuir(ve, cible);
 					}
 					else if(!memeEquipe && adversaire.getLeader() == -1 && (adversaire.getEquipe().size()) > this.getEquipe().size()) { // on cherche à se faire convertir par l'autre leader si son équipe est plus grande
 						// duel
+						System.out.println("Je me cherche un nouveau leader");
 						parler("Je vais voir ailleurs ! " + refPlusProche, ve);
 						deplacements.seDirigerVers(refPlusProche);
 					}
 					else if(!memeEquipe && adversaire.getDefense() < this.getCharisme())
 					{
+						System.out.println("Je cherche à convertir");
 						parler("Je convertis quelqu'un qui n'est pas dangereux",ve);
 						convertir(ve, cible);
 					}
 					else {
+						System.out.println("je me balade");
 						parler("J'erre...", ve);
 						deplacements.seDirigerVers(0); // errer
 					}
 				}
 			} else { // si voisins, mais plus eloignes
 				if(!memeEquipe && dernierPersonnage(ve)) { //On cherche à aller tuer notre leader si il ne reste qu'un personnage
+					System.out.println("Je peux aller tuer mon leader");
 					parler("Je vais vers mon leader " + this.getLeader(), ve);
 					deplacements.seDirigerVers(this.getLeader());
-
 				}
 				else if(cible.getControleur().getElement() instanceof Personnage && isDanger((Personnage)cible.getControleur().getElement()))
 				{
+					System.out.println("Il y a un personnage pas loin qui est un danger");
 					parler("Je fuis un danger",ve);
 					fuir(ve, cible);
 				}
 				else if(cible.getControleur().getElement() instanceof Potion && isBonnePotion(cible.getControleur().getElement()))
 				{
+					System.out.println("Il y a une potion pas loin que j'aime");
 					parler("Je vais chercher une potion que j'aime",ve);
 					deplacements.seDirigerVers(refPlusProche);
 				}
 				else if(this.getLeader() == -1 && this.getEquipe().size() == 0)//On est pas leader
 				{
+					System.out.println("Je me cherche un leader");
 					parler("Je vais me trouver un leader !", ve);
 					deplacements.seDirigerVers(trouverMeilleurLeader(ve.getControleur().getArene()));
 				}
 				else if(this.getLeader() == -1 && this.getEquipe().size() > 0)//On est leader
 				{
+					System.out.println("Je vais me diriger vers une personne qui n'est pas dangereurse");
 					parler("Je vais vers le plus proche car il ne présente pas de danger", ve);
 					deplacements.seDirigerVers(refPlusProche);
 				}
 				else {
+					System.out.println("Il y a un souci");
 					parler("J'erre...", ve);
 					deplacements.seDirigerVers(new Point(50,50)); // On aime le centre
 				}

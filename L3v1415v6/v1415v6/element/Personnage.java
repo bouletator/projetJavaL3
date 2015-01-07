@@ -420,7 +420,7 @@ public class Personnage extends Element implements IPersonnage {
 		}
 
 		//Si tous les leaders ont la même taille d'équipe
-		if(bestLeader != null)
+		if(bestLeader == null)
 			//Tant pis
 			return 0;
 			//Sinon on renvoie la référence de celui qui a la plus grande équipe
