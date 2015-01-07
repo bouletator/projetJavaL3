@@ -8,6 +8,7 @@ import interaction.Actions;
 import interaction.Deplacements;
 import interfaceGraphique.VueElement;
 
+import java.awt.*;
 import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Hashtable;
@@ -334,8 +335,16 @@ public class Personnage extends Element implements IPersonnage {
 
 
 
-	protected void fuir(VueElement veDanger) {
-		this.deplacements.seDirigerVers(veDanger.getRef());
+	protected void fuir(VueElement ve, VueElement veDanger) {
+		int x=ve.getPoint().x, y=ve.getPoint().y;
+		int xDan=veDanger.getPoint().x, yDan=veDanger.getPoint().y;
+
+		Point newDir = new Point();
+
+		//nouvelle direction
+		newDir.setLocation(x-xDan, y-yDan);
+
+		this.deplacements.seDirigerVers(newDir);
 	}
 
 	protected void convertir(VueElement per, VueElement targetVe) {
