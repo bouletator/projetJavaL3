@@ -47,6 +47,8 @@ public class JeTeVois extends Personnage {
 			//On mémorise tous les personnages vus.
 			this.listePersonnagesVus.putAll(voisins);
 
+			System.out.println("J'ai vu tous mes voisins");
+
 			VueElement cible = Calculs.chercherElementProche(ve, voisins);
 
 			int distPlusProche = Calculs.distanceChebyshev(ve.getPoint(), cible.getPoint());
@@ -76,6 +78,7 @@ public class JeTeVois extends Personnage {
 					Personnage adversaire = (Personnage) elemPlusProche;
 					if(isDanger(adversaire))
 					{
+						parler("Je fuis plus fort que moi !!", ve);
 						fuir(cible);
 					}
 					else if(!memeEquipe && adversaire.getLeader() == -1 && (adversaire.getEquipe().size()) > this.getEquipe().size()) { // on cherche à se faire convertir par l'autre leader si son équipe est plus grande
