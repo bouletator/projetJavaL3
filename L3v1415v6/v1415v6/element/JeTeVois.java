@@ -180,6 +180,7 @@ public class JeTeVois extends Personnage {
 		// si on peut être converti ou convertir
 		if(personnage.getForce()<this.getCharisme() || personnage.getCharisme()>this.getForce()) return false;
 
+		//si le perso peut nous tuer d'un coup
 		if(super.isDanger(personnage))return true;
 
 		final int CRITICAL_RANGE = 11;
@@ -195,11 +196,8 @@ public class JeTeVois extends Personnage {
 			return false;
 		}
 
-		// si on peut convertir le personnage
-		if (personnage.getForce() < this.getCharisme()) return false;
-
 		// si on peut tuer le personnage d'un coup
-		if ((CRITICAL_RANGE + this.getForce()) * (1 - personnage.getDefense()/100) < 0)
+		if (personnage.getHP() - (CRITICAL_RANGE + this.getForce()) * (1 - personnage.getDefense()/100) < 0)
 			return false;
 
 		//TODO Cas de base
