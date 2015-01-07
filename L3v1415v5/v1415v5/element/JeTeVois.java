@@ -37,6 +37,8 @@ public class JeTeVois extends Personnage {
 		Actions actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
 		Deplacements deplacements = new Deplacements(ve,voisins);
 
+		System.out.println(ve.getPoint());
+
 		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
 			//TODO : si on a pas de voisin immédiat il ne faut pas faire n'importe quoi !
 			parler("J'erre...", ve);
@@ -123,10 +125,59 @@ public class JeTeVois extends Personnage {
 					deplacements.seDirigerVers(new Point(50,50)); // On aime le centre
 				}
 			}
+
+
 		}
 	}
 
+    @Override
+	protected boolean isBonnePotion(Element element) {
+		Potion potion = (Potion) element;
 
+		if(super.isBonnePotion(element))return true;
 
+		///On ne se soucie pas de la force
 
+		// limite: defense maximale à perdre en prenant une potion
+		final int DEFENSE_MAX_LOSS = 15;
+
+		//si la potion diminue la vitesse ou le charisme ou trop de defense on ne la prend pas
+		if (potion.getVitesse() < 0
+				|| potion.getCharisme() < 0
+				|| potion.getDefense() < DEFENSE_MAX_LOSS)
+			return false;
+
+		//si la potion augmente la vitesse, le charisme ou la défense en vérifiant les conditions précédentes alors on les prend
+		if (potion.getVitesse() > 0 || potion.getCharisme() > 0 || potion.getDefense() > 0) return true;
+
+		return false;
+	}
+
+	@Override
+	protected boolean isDanger(Personnage personnage) {
+		if(super.isDanger(personnage))return true;
+
+		final int CRITICAL_RANGE = 11;
+
+		// cette valeur détermine les points de vie restants en cas de coup critique
+		int thisMinHPApresAttaque = (CRITICAL_RANGE + personnage.getForce()) * (1 - this.getDefense()/100);
+		int thisMaxHPApresAttaque = (personnage.getForce()) * (1 - this.getDefense()/100);
+
+		// si le personnage peut nous faire très mal mais pas tuer en un coup critique
+		// et si on peut le convertir
+		if (thisMaxHPApresAttaque > 0 && thisMinHPApresAttaque <= CRITICAL_RANGE) {
+			//TODO A choisir. Peut être que c'est une situation plus dangeureuse que prévue
+			return false;
+		}
+
+		// si on peut convertir le personnage
+		if (personnage.getForce() < this.getCharisme()) return false;
+
+		// si on peut tuer le personnage d'un coup
+		if ((CRITICAL_RANGE + this.getForce()) * (1 - personnage.getDefense()/100) < 0)
+			return false;
+
+		//TODO Cas de base
+		return false;
+	}
 }
