@@ -4,6 +4,7 @@
 import java.rmi.RemoteException;
 
 import controle.Console;
+import element.JeTeVois;
 import element.Personnage;
 
 /**
@@ -24,7 +25,7 @@ public class TestPersonnageCentre {
 				ipArene = args[1];
 			}
 			
-			Personnage bidule = new Personnage("Bidule", 200, 100, 100, 150, 200);
+			Personnage bidule = new JeTeVois("JeTeVois", 10,10,10,1,10);
 			
 			new Console(bidule, 40, 40, port, ipArene);
 		} catch (RemoteException e) {

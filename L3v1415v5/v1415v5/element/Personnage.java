@@ -317,32 +317,14 @@ public class Personnage extends Element implements IPersonnage {
 		//si la potion risque de tuer
 		if (potion.getHP() + this.getHP() <= 0) return false;
 
-		// pour JeTeVois
-		if(this instanceof JeTeVois) {
 
-			///On ne se soucie pas de la force
 
-			// limite: defense maximale à perdre en prenant une potion
-			final int DEFENSE_MAX_LOSS = 15;
-
-			//si la potion diminue la vitesse ou le charisme ou trop de defense on ne la prend pas
-			if (potion.getVitesse() < 0
-			 || potion.getCharisme() < 0
-			 || potion.getDefense() < DEFENSE_MAX_LOSS)
-				return false;
-
-			//si la potion augmente la vitesse, le charisme ou la défense en vérifiant les conditions précédentes alors on les prend
-			if (potion.getVitesse() > 0 || potion.getCharisme() > 0 || potion.getDefense() > 0) return true;
-		}
 			//si c'est un autre type de potion
 			return false;
 	}
 
 	protected boolean isDanger(Personnage personnage) {
-		final int CRITICAL_RANGE = 11;
-
 		// cette valeur détermine les points de vie restants en cas de coup critique
-		int thisMinHPApresAttaque = (CRITICAL_RANGE + personnage.getForce()) * (1 - this.getDefense()/100);
 		int thisMaxHPApresAttaque = (personnage.getForce()) * (1 - this.getDefense()/100);
 
 		// si le personnage peut nous tuer d'un coup critique
@@ -350,23 +332,7 @@ public class Personnage extends Element implements IPersonnage {
 			return true;
 		}
 
-		if(this instanceof JeTeVois) {
-
-			// si le personnage peut nous faire très mal mais pas tuer en un coup critique
-			// et si on peut le convertir
-			if (thisMaxHPApresAttaque > 0 && thisMinHPApresAttaque <= CRITICAL_RANGE) {
-				//TODO A choisir. Peut être que c'est une situation plus dangeureuse que prévue
-				return false;
-			}
-
-			// si on peut convertir le personnage
-			if (personnage.getForce() < this.getCharisme()) return false;
-
-			// si on peut tuer le personnage d'un coup
-			if ((CRITICAL_RANGE + this.getForce()) * (1 - personnage.getDefense()/100) < 0)
-				return false;
-		}
-		return true;
+		return false;
 	}
 
 
