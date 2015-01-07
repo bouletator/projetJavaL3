@@ -23,7 +23,7 @@ public class TestPotionAlea {
 			}
 
 			Random r = new Random();
-			Element anduril = new Potion("Anduril", r.nextInt(10), r.nextInt(10), r.nextInt(10), r.nextInt(1), r.nextInt(10));
+			Element anduril = new Potion("Potion", r.nextInt(10), r.nextInt(10), r.nextInt(10), r.nextInt(2), r.nextInt(10));
 	
 			new Console(anduril, r.nextInt(100), r.nextInt(100), port, ipArene);
 		} catch (RemoteException e) {

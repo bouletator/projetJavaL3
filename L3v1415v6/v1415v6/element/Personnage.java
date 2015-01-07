@@ -369,7 +369,7 @@ public class Personnage extends Element implements IPersonnage {
 							leader == ve.getRef() || // cible est le leader de this
 							per.getLeader() == this.leader; // this est le leader de cible
 					//si ce n'est pas moi, que le perso n'est pas mort, et pas de la même équipe
-					if(!(per instanceof JeTeVois) && per.getVie()>0 && !memeEquipe) {
+					if(ve.getRef() != vueElement.getRef() && per.getVie()>0 && !memeEquipe) {
 						//S'il y a plus d'un joueur qui n'est pas dans mon équipe alors on retourne false
 						count++;
 						if(count > 1) return false;
@@ -388,18 +388,21 @@ public class Personnage extends Element implements IPersonnage {
 		else return false;
 	}
 
-	protected int trouverMeilleurLeader(IArene arene) {
+	protected Point trouverMeilleurLeader(VueElement vueElement) {
+
+
 		int max=0;
 		VueElement bestLeader = null;
+
 		try {
 			//Pour tous les objets 'visibles'
-			for(VueElement ve : arene.getWorld())
+			for(VueElement ve : vueElement.getControleur().getArene().getWorld())
 			{
 				//Si c'est un personnage
 				if(ve.getControleur().getElement() instanceof Personnage) {
 					Personnage per = (Personnage)ve.getControleur().getElement();
 					///Si le personnage est un leader
-					if(!(per instanceof JeTeVois) && per.getVie()>0 && per.getLeader()==ve.getRef()) {
+					if(ve.getRef() != vueElement.getRef() && per.getVie()>0 && per.getLeader()==ve.getRef()) {
 						//Si son equipe est la plus grande
 						if(per.getEquipe().size()>max){
 							//c'est le max pour l'instant
@@ -414,15 +417,15 @@ public class Personnage extends Element implements IPersonnage {
 		catch (RemoteException re){
 			//TODO Supprimer la trace
 			System.out.println("Remote exception Catched. Coming from VueElement 'visibility'");
-			return 0;
+			return null;
 		}
 
 		//Si tous les leaders ont la même taille d'équipe
 		if(bestLeader == null)
 			//Tant pis
-			return 0;
+			return null;
 			//Sinon on renvoie la référence de celui qui a la plus grande équipe
-		else return bestLeader.getRef();
+		else return bestLeader.getPoint();
 
 	}
 }

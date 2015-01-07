@@ -3,6 +3,7 @@ package element;
 import interaction.Actions;
 import interaction.Deplacements;
 import interfaceGraphique.VueElement;
+import serveur.IArene;
 import utilitaires.Calculs;
 
 import java.awt.*;
@@ -39,9 +40,26 @@ public class JeTeVois extends Personnage {
 		System.out.println(ve.getPoint());
 
 		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
-			//TODO : si on a pas de voisin immédiat il ne faut pas faire n'importe quoi !
-			parler("J'erre...", ve);
-			deplacements.seDirigerVers(0); //errer
+
+			parler("Je cherche une potion...", ve);
+			Point pointDir=null;
+			// ON cherche une potion
+			pointDir=trouverMeilleurePotion(ve);
+			// S'il n'y en a pas alors on cherche un leader
+			if(pointDir==null)
+				pointDir=trouverMeilleurLeader(ve);
+			// S'il n'y en a pas alors on cherche un ennemi faible
+			if(pointDir==null)
+				pointDir=trouverEnnemiFacile(ve);
+			// S'il n'y en a pas alors on erre
+			if(pointDir==null) {
+				parler("J'erre...0",ve);
+				deplacements.seDirigerVers(0); //errer si il n'y a pas de leader
+			}
+			else
+				deplacements.seDirigerVers(pointDir);
+
+
 
 		} else {
 			//On mémorise tous les personnages vus.
@@ -83,17 +101,20 @@ public class JeTeVois extends Personnage {
 						parler("Je vais voir ailleurs ! " + refPlusProche, ve);
 						deplacements.seDirigerVers(refPlusProche);
 					}
-					else if(!memeEquipe && adversaire.getDefense() < this.getCharisme())
+					else if(!memeEquipe && adversaire.getForce() < this.getCharisme())
 					{
 						parler("Je convertis quelqu'un qui n'est pas dangereux",ve);
 						convertir(ve, cible, actions);
 					}
 					else {
-						parler("J'erre...", ve);
+						parler("J'erre...1", ve);
 						deplacements.seDirigerVers(0); // errer
 					}
 				}
 			} else { // si voisins, mais plus eloignes
+
+				Point newDir;
+
 				if(!memeEquipe && dernierPersonnage(ve)) { //On cherche à aller tuer notre leader si il ne reste qu'un personnage
 					parler("Je vais vers mon leader " + this.getLeader(), ve);
 					deplacements.seDirigerVers(this.getLeader());
@@ -109,10 +130,10 @@ public class JeTeVois extends Personnage {
 					parler("Je vais chercher une potion que j'aime",ve);
 					deplacements.seDirigerVers(refPlusProche);
 				}
-				else if(this.getLeader() == -1 && this.getEquipe().size() == 0)//On est pas leader
+				else if(this.getLeader() == -1 && this.getEquipe().size() == 0 && (newDir = trouverMeilleurLeader(ve))!=null)//On est pas leader
 				{
 					parler("Je vais me trouver un leader !", ve);
-					deplacements.seDirigerVers(trouverMeilleurLeader(ve.getControleur().getArene()));
+					deplacements.seDirigerVers(newDir);
 				}
 				else if(this.getLeader() == -1 && this.getEquipe().size() > 0)//On est leader
 				{
@@ -120,7 +141,7 @@ public class JeTeVois extends Personnage {
 					deplacements.seDirigerVers(refPlusProche);
 				}
 				else {
-					parler("J'erre...", ve);
+					parler("J'erre...2", ve);
 					deplacements.seDirigerVers(new Point(50,50)); // On aime le centre
 				}
 			}
@@ -129,7 +150,9 @@ public class JeTeVois extends Personnage {
 		}
 	}
 
-    @Override
+
+
+	@Override
 	protected boolean isBonnePotion(Element element) {
 		Potion potion = (Potion) element;
 
@@ -154,7 +177,8 @@ public class JeTeVois extends Personnage {
 
 	@Override
 	protected boolean isDanger(Personnage personnage) {
-		if(personnage.getForce()<this.getCharisme()) return false;
+		// si on peut être converti ou convertir
+		if(personnage.getForce()<this.getCharisme() || personnage.getCharisme()>this.getForce()) return false;
 
 		if(super.isDanger(personnage))return true;
 
@@ -180,5 +204,50 @@ public class JeTeVois extends Personnage {
 
 		//TODO Cas de base
 		return true;
+	}
+
+	private Point trouverMeilleurePotion(VueElement vueElement) {
+
+		//Pour tous les objets 'visibles'
+		try {
+			for (VueElement ve : vueElement.getControleur().getArene().getWorld()) {
+				//Si c'est une potion
+				if (ve.getControleur().getElement() instanceof Potion) {
+					Potion pot = (Potion) ve.getControleur().getElement();
+					if (isBonnePotion(pot))
+						return ve.getPoint();
+				}
+			}
+		}
+		catch (RemoteException re){
+			//TODO Supprimer la trace
+			System.out.println("Remote exception Catched. Coming from VueElement 'visibility'");
+			return null;
+		}
+
+		return null;
+	}
+
+	private Point trouverEnnemiFacile(VueElement vueElement) {
+
+		//Pour tous les objets 'visibles'
+		try {
+			for (VueElement ve : vueElement.getControleur().getArene().getWorld()) {
+				//Si c'est une potion
+				if (ve.getControleur().getElement() instanceof Personnage
+						&& ve.getRef()!=vueElement.getRef()) {
+					Personnage per = (Personnage) ve.getControleur().getElement();
+					if (!isDanger(per))
+						return ve.getPoint();
+				}
+			}
+		}
+		catch (RemoteException re){
+			//TODO Supprimer la trace
+			System.out.println("Remote exception Catched. Coming from VueElement 'visibility'");
+			return null;
+		}
+
+		return null;
 	}
 }
