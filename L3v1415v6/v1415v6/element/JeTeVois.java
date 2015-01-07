@@ -154,13 +154,15 @@ public class JeTeVois extends Personnage {
 
 	@Override
 	protected boolean isDanger(Personnage personnage) {
+		if(personnage.getForce()<this.getCharisme()) return false;
+
 		if(super.isDanger(personnage))return true;
 
 		final int CRITICAL_RANGE = 11;
 
 		// cette valeur détermine les points de vie restants en cas de coup critique
 		int thisMinHPApresAttaque = (CRITICAL_RANGE + personnage.getForce()) * (1 - this.getDefense()/100);
-		int thisMaxHPApresAttaque = (personnage.getForce()) * (1 - this.getDefense()/100);
+		int thisMaxHPApresAttaque = (int)((personnage.getForce()) * (1 - (double)this.getDefense()/100));
 
 		// si le personnage peut nous faire très mal mais pas tuer en un coup critique
 		// et si on peut le convertir
