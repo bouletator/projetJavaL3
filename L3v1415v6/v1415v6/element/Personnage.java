@@ -342,8 +342,8 @@ public class Personnage extends Element implements IPersonnage {
 		Point newDir = new Point();
 
 		//nouvelle direction
-		newDir.setLocation(x-xDan, y-yDan);
-
+		newDir.setLocation(x+x-xDan, y+y-yDan);
+		System.out.println("new:"+newDir);
 		deplacements.seDirigerVers(newDir);
 	}
 
