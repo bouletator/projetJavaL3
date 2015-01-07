@@ -35,8 +35,6 @@ public class Personnage extends Element implements IPersonnage {
 	 */
 	private ArrayList<Integer> equipe;
 
-	protected Deplacements deplacements;
-	protected Actions actions;
 
 	/**
 	 * Constructeur d'un personnage avec un nom et une quantite de force et de charisme.
@@ -252,8 +250,8 @@ public class Personnage extends Element implements IPersonnage {
 	 * @throws RemoteException
 	 */
 	public void strategie(VueElement ve, Hashtable<Integer,VueElement> voisins, Integer refRMI) throws RemoteException {
-		actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
-		deplacements = new Deplacements(ve, voisins);
+		Actions actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
+		Deplacements deplacements = new Deplacements(ve, voisins);
 
 		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
 			parler("J'erre...", ve);
@@ -343,11 +341,11 @@ public class Personnage extends Element implements IPersonnage {
 
 		//nouvelle direction
 		newDir.setLocation(x+x-xDan, y+y-yDan);
-		System.out.println("new:"+newDir);
+		System.out.println("new:" + newDir);
 		deplacements.seDirigerVers(newDir);
 	}
 
-	protected void convertir(VueElement per, VueElement targetVe) {
+	protected void convertir(VueElement per, VueElement targetVe, Actions actions) {
 		try {
 			actions.interaction(per.getRef(), targetVe.getRef(), per.getControleur().getArene());
 		} catch (RemoteException e) {

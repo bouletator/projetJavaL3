@@ -86,7 +86,7 @@ public class JeTeVois extends Personnage {
 					else if(!memeEquipe && adversaire.getDefense() < this.getCharisme())
 					{
 						parler("Je convertis quelqu'un qui n'est pas dangereux",ve);
-						convertir(ve, cible);
+						convertir(ve, cible, actions);
 					}
 					else {
 						parler("J'erre...", ve);
