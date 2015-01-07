@@ -12,6 +12,7 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
+import serveur.IArene;
 import utilitaires.Calculs;
 
 /**
@@ -32,6 +33,10 @@ public class Personnage extends Element implements IPersonnage {
 	 * Vide si le leader n'est pas egal a -1.
 	 */
 	private ArrayList<Integer> equipe;
+
+	protected Deplacements deplacements;
+	protected Actions actions;
+
 
 	/**
 	 * Constructeur d'un personnage avec un nom et une quantite de force et de charisme.
@@ -188,7 +193,7 @@ public class Personnage extends Element implements IPersonnage {
 	public void clearLeader() throws RemoteException {
 		leader = -1;
 	}
-	
+
 	@Override
 	/** ----------------------------------------------------------
 	 * 		public void ajouterEquipe(int ref)
@@ -248,8 +253,8 @@ public class Personnage extends Element implements IPersonnage {
 	 * @throws RemoteException
 	 */
 	public void strategie(VueElement ve, Hashtable<Integer,VueElement> voisins, Integer refRMI) throws RemoteException {
-        Actions actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
-        Deplacements deplacements = new Deplacements(ve,voisins);
+        actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
+        deplacements = new Deplacements(ve,voisins);
         
         if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
         	parler("J'erre...", ve);
@@ -300,5 +305,153 @@ public class Personnage extends Element implements IPersonnage {
 				}
 			}
         }
+	}
+
+	protected boolean isBonnePotion(Element element){
+
+		Potion potion =(Potion) element;
+
+		//si la potion est déja ramassée on ne la prend pas
+		if (potion.getVie() == 0) return false;
+
+		//si la potion risque de tuer
+		if (potion.getHP() + this.getHP() <= 0) return false;
+
+		// pour JeTeVois
+		if(this instanceof JeTeVois) {
+
+			///On ne se soucie pas de la force
+
+			// limite: defense maximale à perdre en prenant une potion
+			final int DEFENSE_MAX_LOSS = 15;
+
+			//si la potion diminue la vitesse ou le charisme ou trop de defense on ne la prend pas
+			if (potion.getVitesse() < 0
+			 || potion.getCharisme() < 0
+			 || potion.getDefense() < DEFENSE_MAX_LOSS)
+				return false;
+
+			//si la potion augmente la vitesse, le charisme ou la défense en vérifiant les conditions précédentes alors on les prend
+			if (potion.getVitesse() > 0 || potion.getCharisme() > 0 || potion.getDefense() > 0) return true;
+		}
+			//si c'est un autre type de potion
+			return false;
+	}
+
+	protected boolean isDanger(Personnage personnage) {
+		final int CRITICAL_RANGE = 11;
+
+		// cette valeur détermine les points de vie restants en cas de coup critique
+		int thisMinHPApresAttaque = (CRITICAL_RANGE + personnage.getForce()) * (1 - this.getDefense()/100);
+		int thisMaxHPApresAttaque = (personnage.getForce()) * (1 - this.getDefense()/100);
+
+		// si le personnage peut nous tuer d'un coup critique
+		if (thisMaxHPApresAttaque <= 0) {
+			return true;
+		}
+
+		if(this instanceof JeTeVois) {
+
+			// si le personnage peut nous faire très mal mais pas tuer en un coup critique
+			// et si on peut le convertir
+			if (thisMaxHPApresAttaque > 0 && thisMinHPApresAttaque <= CRITICAL_RANGE) {
+				//TODO A choisir. Peut être que c'est une situation plus dangeureuse que prévue
+				return false;
+			}
+
+			// si on peut convertir le personnage
+			if (personnage.getForce() < this.getCharisme()) return false;
+
+			// si on peut tuer le personnage d'un coup
+			if ((CRITICAL_RANGE + this.getForce()) * (1 - personnage.getDefense()/100) < 0)
+				return false;
+		}
+		return true;
+	}
+
+
+
+	protected void fuir(VueElement veDanger) {
+		this.deplacements.seDirigerVers(veDanger.getRef());
+	}
+
+	protected void convertir(VueElement per, VueElement targetVe) {
+		try {
+			actions.interaction(per.getRef(), targetVe.getRef(), per.getControleur().getArene());
+		} catch (RemoteException e) {
+			e.printStackTrace();
+		}
+		return;
+	}
+
+
+	protected boolean dernierPersonnage(VueElement vueElement) {
+		int count = 0;
+		try {
+			//Pour tous les objets 'visibles'
+			for(VueElement ve : vueElement.getControleur().getArene().getWorld())
+			{
+				//Si c'est un personnage
+				if(ve.getControleur().getElement() instanceof Personnage) {
+					Personnage per = (Personnage)ve.getControleur().getElement();
+					//booleen vérifiant l'apartenance à la même équipe
+					boolean memeEquipe = (leader != -1 && leader == per.getLeader()) || // meme leader
+							leader == ve.getRef() || // cible est le leader de this
+							per.getLeader() == this.leader; // this est le leader de cible
+					//si ce n'est pas moi, que le perso n'est pas mort, et pas de la même équipe
+					if(!(per instanceof JeTeVois) && per.getVie()>0 && !memeEquipe) {
+						//S'il y a plus d'un joueur qui n'est pas dans mon équipe alors on retourne false
+						count++;
+						if(count > 1) return false;
+					}
+				}
+			}
+
+		}
+		catch (RemoteException re){
+			//TODO Supprimer la trace
+			System.out.println("Remote exception Catched. Coming from VueElement 'visibility'");
+			return false;
+		}
+
+		if (count==1) return true;
+		else return false;
+	}
+
+	protected int trouverMeilleurLeader(IArene arene) {
+		int max=0;
+		VueElement bestLeader = null;
+		try {
+			//Pour tous les objets 'visibles'
+			for(VueElement ve : arene.getWorld())
+			{
+				//Si c'est un personnage
+				if(ve.getControleur().getElement() instanceof Personnage) {
+					Personnage per = (Personnage)ve.getControleur().getElement();
+					///Si le personnage est un leader
+					if(!(per instanceof JeTeVois) && per.getVie()>0 && per.getLeader()==ve.getRef()) {
+						//Si son equipe est la plus grande
+						if(per.getEquipe().size()>max){
+							//c'est le max pour l'instant
+							max = per.getEquipe().size();
+							bestLeader = ve;
+						}
+					}
+				}
+			}
+
+		}
+		catch (RemoteException re){
+			//TODO Supprimer la trace
+			System.out.println("Remote exception Catched. Coming from VueElement 'visibility'");
+			return 0;
+		}
+
+		//Si tous les leaders ont la même taille d'équipe
+		if(bestLeader != null)
+			//Tant pis
+			return 0;
+		//Sinon on renvoie la référence de celui qui a la plus grande équipe
+		else return bestLeader.getRef();
 	}
 }

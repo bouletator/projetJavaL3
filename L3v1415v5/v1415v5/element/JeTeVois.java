@@ -3,6 +3,7 @@ package element;
 import interaction.Actions;
 import interaction.Deplacements;
 import interfaceGraphique.VueElement;
+import serveur.IArene;
 import utilitaires.Calculs;
 
 import java.awt.*;
@@ -74,7 +75,7 @@ public class JeTeVois extends Personnage {
 					Personnage adversaire = (Personnage) elemPlusProche;
 					if(isDanger(adversaire))
 					{
-						fuire(this, adversaire);
+						fuir(cible);
 					}
 					else if(!memeEquipe && adversaire.getLeader() == -1 && (adversaire.getEquipe().size()) > this.getEquipe().size()) { // on cherche à se faire convertir par l'autre leader si son équipe est plus grande
 						// duel
@@ -84,7 +85,7 @@ public class JeTeVois extends Personnage {
 					else if(!memeEquipe && adversaire.getDefense() < this.getCharisme())
 					{
 						parler("Je convertis quelqu'un qui n'est pas dangereux",ve);
-						convertir(this, adversaire);
+						convertir(ve, cible);
 					}
 					else {
 						parler("J'erre...", ve);
@@ -92,17 +93,17 @@ public class JeTeVois extends Personnage {
 					}
 				}
 			} else { // si voisins, mais plus eloignes
-				if(!memeEquipe && dernierPersonnage()) { //On cherche à aller tuer notre leader si il ne reste qu'un personnage
+				if(!memeEquipe && dernierPersonnage(ve)) { //On cherche à aller tuer notre leader si il ne reste qu'un personnage
 					parler("Je vais vers mon leader " + this.getLeader(), ve);
 					deplacements.seDirigerVers(this.getLeader());
 
 				}
-				else if(cible.getControleur().getElement() instanceof Personnage && isDanger(cible.getControleur().getElement()))
+				else if(cible.getControleur().getElement() instanceof Personnage && isDanger((Personnage)cible.getControleur().getElement()))
 				{
 					parler("Je fuis un danger",ve);
-					fuir(this,cible.getControleur().getElement());
+					fuir(cible);
 				}
-				else if(cible.getControleur().getElement() instanceof Potion && isBonnePotion(cible))
+				else if(cible.getControleur().getElement() instanceof Potion && isBonnePotion(cible.getControleur().getElement()))
 				{
 					parler("Je vais chercher une potion que j'aime",ve);
 					deplacements.seDirigerVers(refPlusProche);
@@ -114,7 +115,7 @@ public class JeTeVois extends Personnage {
 				}
 				else if(this.getLeader() == -1 && this.getEquipe().size() > 0)//On est leader
 				{
-					parler("Je vais vers le plus proche car il ne présente pas de danger");
+					parler("Je vais vers le plus proche car il ne présente pas de danger", ve);
 					deplacements.seDirigerVers(refPlusProche);
 				}
 				else {
@@ -124,4 +125,8 @@ public class JeTeVois extends Personnage {
 			}
 		}
 	}
+
+
+
+
 }
