@@ -25,8 +25,17 @@ public class TestPersonnageAlea {
 				ipArene = args[1];
 			}
 
-			Random r = new Random();
-			Personnage bidule = new JeTeVois("Truc",  r.nextInt(30), r.nextInt(30), r.nextInt(29)+1, 1, r.nextInt(10));
+			Random r = new Random(System.currentTimeMillis());
+			int force = r.nextInt(99);
+			System.out.println("Force " + force);
+			int vie = r.nextInt(100-force);
+			System.out.println("HP "+vie);
+			int charisme = r.nextInt(100-force-vie);
+			System.out.println("Charisme "+charisme);
+			int defense = (100-force-vie-charisme)*10 / 16;
+			System.out.println("Defense "+defense);
+			int vitesse = 1;
+			Personnage bidule = new JeTeVois("JeTeVois", force,charisme,vie,vitesse,defense);
 			new Console(bidule, r.nextInt(100), r.nextInt(100), port, ipArene);
 		} catch (RemoteException e) {
 			e.printStackTrace();

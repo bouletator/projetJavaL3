@@ -129,7 +129,8 @@ public class DuelBasic implements IDuel {
 		int attForce = attaquant.getElement().getCaract("force");
 		int defDef = defenseur.getElement().getCaract("defense");
 		Random r = new Random(System.currentTimeMillis());
-		int totalPerdu =  (r.nextInt(11) + attForce) * (1 - defDef/100);
+		int totalPerdu = (int) ((r.nextInt(11) + attForce) * (1-(double)defDef/100));
+
 		defHp -= totalPerdu;
 		
 		System.out.println("Ouch j'ai perdu " + totalPerdu + ", il me reste " + ((Personnage)defenseur.getElement()).getHP() + " points de vie.");

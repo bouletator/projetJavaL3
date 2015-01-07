@@ -323,7 +323,7 @@ public class Personnage extends Element implements IPersonnage {
 
 	protected boolean isDanger(Personnage personnage) {
 		// cette valeur détermine les points de vie restants en cas de coup critique
-		int thisMaxHPApresAttaque = (personnage.getForce()) * (1 - this.getDefense()/100);
+		int thisMaxHPApresAttaque = (int) ((personnage.getForce()) * (1.0 - (double)this.getDefense()/100.0));
 
 		// si le personnage peut nous tuer d'un coup critique
 		if (thisMaxHPApresAttaque <= 0) {
