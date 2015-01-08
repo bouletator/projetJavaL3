@@ -1,0 +1,141 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Diagram>
+  <ID>JAVA</ID>
+  <OriginalElement>element.JeTeVois</OriginalElement>
+  <nodes>
+    <node x="-8953.968518518508" y="-8388.999999999995">element.IElement</node>
+    <node x="-8626.718518518508" y="-8254.999999999995">element.IPersonnage</node>
+    <node x="-10414.718518518508" y="-7701.9999999999945">controle.Console</node>
+    <node x="-9644.372222222211" y="-8084.9999999999945">interaction.Deplacements</node>
+    <node x="-10206.022222222211" y="-8659.999999999995">java.io.Serializable</node>
+    <node x="-9758.283333333322" y="-7300.9999999999945">element.JeTeVois</node>
+    <node x="-10856.499999999989" y="-8334.999999999995">serveur.Arene</node>
+    <node x="-9378.872222222211" y="-8583.999999999995">interaction.DuelBasic</node>
+    <node x="-10007.372222222211" y="-8581.999999999995">interfaceGraphique.VueElement</node>
+    <node x="-9385.372222222211" y="-8287.999999999995">interaction.Actions</node>
+    <node x="-10479.499999999989" y="-8577.999999999995">interfaceGraphique.IHM</node>
+    <node x="-9266.218518518508" y="-7768.9999999999945">element.Personnage</node>
+    <node x="-9072.718518518508" y="-8122.9999999999945">element.Element</node>
+  </nodes>
+  <notes />
+  <edges>
+    <edge source="interaction.Actions" target="interfaceGraphique.VueElement">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="interfaceGraphique.VueElement" target="java.io.Serializable">
+      <point x="0.0" y="-205.0" />
+      <point x="-9749.372222222211" y="-8601.999999999995" />
+      <point x="-10145.122222222211" y="-8601.999999999995" />
+      <point x="17.399999999999977" y="14.0" />
+    </edge>
+    <edge source="element.Element" target="element.IElement">
+      <point x="104.0" y="-155.0" />
+      <point x="-8786.718518518508" y="-8091.9999999999945" />
+      <point x="-8675.218518518508" y="-8091.9999999999945" />
+      <point x="-62.75" y="84.0" />
+    </edge>
+    <edge source="element.Personnage" target="element.Element">
+      <point x="84.5" y="-285.0" />
+      <point x="-8752.718518518508" y="-7421.9999999999945" />
+      <point x="-8786.718518518508" y="-7421.9999999999945" />
+      <point x="104.0" y="155.0" />
+    </edge>
+    <edge source="controle.Console" target="java.io.Serializable">
+      <point x="-254.39999999999998" y="-265.0" />
+      <point x="-10332.11851851851" y="-7421.9999999999945" />
+      <point x="-11029.999999999989" y="-7421.9999999999945" />
+      <point x="-11029.999999999989" y="-8611.999999999995" />
+      <point x="-10197.322222222212" y="-8611.999999999995" />
+      <point x="-34.80000000000001" y="14.0" />
+    </edge>
+    <edge source="serveur.Arene" target="java.io.Serializable">
+      <point x="-179.0" y="-305.0" />
+      <point x="-10678.499999999989" y="-8601.999999999995" />
+      <point x="-10179.922222222212" y="-8601.999999999995" />
+      <point x="-17.399999999999977" y="14.0" />
+    </edge>
+    <edge source="element.IPersonnage" target="element.IElement">
+      <point x="0.0" y="-64.0" />
+      <point x="62.75" y="84.0" />
+    </edge>
+    <edge source="interfaceGraphique.IHM" target="java.io.Serializable">
+      <point x="-112.0" y="-115.0" />
+      <point x="-10167.499999999989" y="-8582.999999999995" />
+      <point x="-10164.522222222211" y="-8596.999999999995" />
+      <point x="0.0" y="14.0" />
+    </edge>
+    <edge source="element.JeTeVois" target="interfaceGraphique.VueElement">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="element.JeTeVois" target="interaction.Deplacements">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="serveur.Arene" target="interfaceGraphique.VueElement">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="interaction.Deplacements" target="interfaceGraphique.VueElement">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="element.Personnage" target="element.IPersonnage">
+      <point x="253.5" y="-285.0" />
+      <point x="-8601.718518518508" y="-7825.9999999999945" />
+      <point x="-8567.718518518508" y="-7857.9999999999945" />
+      <point x="0.0" y="64.0" />
+    </edge>
+    <edge source="controle.Console" target="element.Element">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="element.Element" target="java.io.Serializable">
+      <point x="-104.0" y="-155.0" />
+      <point x="-8994.718518518508" y="-8611.999999999995" />
+      <point x="-10127.722222222212" y="-8611.999999999995" />
+      <point x="34.799999999999955" y="14.0" />
+    </edge>
+    <edge source="element.JeTeVois" target="element.Personnage">
+      <point x="183.5999999999999" y="-95.0" />
+      <point x="-9345.183333333323" y="-7420.9999999999945" />
+      <point x="-9329.218518518508" y="-7421.9999999999945" />
+      <point x="0.0" y="285.0" />
+    </edge>
+    <edge source="element.JeTeVois" target="interaction.Actions">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="element.Personnage" target="interaction.Actions">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="element.Personnage" target="interaction.Deplacements">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="interfaceGraphique.IHM" target="interfaceGraphique.VueElement">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="interaction.Actions" target="interaction.DuelBasic">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+    <edge source="controle.Console" target="interfaceGraphique.VueElement">
+      <point x="0.0" y="0.0" />
+      <point x="0.0" y="0.0" />
+    </edge>
+  </edges>
+  <settings layout="Hierarchic Group" zoom="0.4" x="-9566.75" y="-7672.0" />
+  <SelectedNodes />
+  <Categories>
+    <Category>Fields</Category>
+    <Category>Constructors</Category>
+    <Category>Methods</Category>
+  </Categories>
+  <SCOPE>All</SCOPE>
+  <VISIBILITY>private</VISIBILITY>
+</Diagram>
+

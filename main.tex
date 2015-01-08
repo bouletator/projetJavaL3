@@ -1,0 +1,118 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+
+\title{Rapport\\Projet de programmation 2014-2015}
+\author{Clément Romanet, Evan Graïne }
+\date{Université Paul Sabatier\\Janvier 2015}
+
+\usepackage{natbib}
+\usepackage{graphicx}
+
+\begin{document}
+
+
+\maketitle
+
+\newpage
+\part{Introduction}
+
+Ce document est un rapport concernant l'UE Projet de Programmation proposé aux étudiants de Troisième Année de Licence d'informatique à l'Université Paul Sabatier.
+
+Les objectifs poursuivis dans la réalisation de ce projet sont multiples: 
+\begin{itemize}
+  \item Prendre en main le langage de programmation Java autour d'un sujet donné
+  \item Travailler en groupe, intégrer la notion d'équipe et savoir gérer son temps
+  \item Concevoir des composants à partir d'une base de logiciel déjà implémentée, savoir s'adapter et innover sur une application déjà existante.
+\end{itemize}
+
+L'application du sujet consiste en un Jeu en 2 dimensions faisant intervenir différents éléments: personnages ou potions, dans une arène. 
+
+Des règles de base ainsi que les sources contenant le serveur (Arène), une interface graphique (IHM), et des éléments représentant l'application actuelle ont été fournies à tous les groupes.
+
+Au cours du projet, l'ensemble des équipes se sont concertées sur les règles du jeu et un vote a eu lieu le Mardi 6 Janvier en fin d'après midi. Une partie des groupes (trinômes) ont codé ces règles et les ont publié peu après.
+
+Jusque là, les tâches à accomplir étaient de prendre en main l'application, et commencer à créer différents éléments et règles personnelles afin d'explorer les possibilités et les limites auxquelles nous devrions nous affronter. 
+
+S'en est suivi une deuxième partie, plus collective cette fois, où chaque groupe ayant pris connaissance des règles votées, devait développer sa propre extension (ici un personnage).
+
+\clearpage
+\part{Prise en main}
+
+La prise en main d'un projet est toujours l'une des parties les plus délicates car on est face à l'inconnu. La distribution des premières sources nous a été faite le 17 décembre 2014. Cette version de prise en main permettait de tester des règles créées par les membres du binôme mais aussi de créer des personnages respectant nos propres règles tout en testant les limites de l'existant.\\
+Le premier point complexe fut la réalisation de règles qui semblaient équilibrées. L'équilibrage de nos règles consiste à ce qu'une caractéristique attaquante avait à affronter une caractéristique défensive correspondante. Ainsi, la force attaque la défense, le charisme attaque la détermination.\\
+Nous avons rapidement buté sur une limite du serveur qui nous a empêché de créer des personnages qui pouvait être là dans un but de support et non dans un but agressif.\\
+Après nos différents essais, nous avons remis une version de nos règles afin de les faire partager pour préparer la version collective.
+
+
+\part{Version collective}
+Cette partie montrera comment nos classes sont organisées et fonctionnent.
+
+\section{Diagramme de classe}
+Voir annexe 1
+
+\section{Fonctionnement}
+Nous avons décidé de créer trois personnages spécialisés  :
+JeTeVois : Personnage charismatique qui va chercher à se mettre à l'abri d'un leader pour préparer des coups d'état.
+Sniper : Personnage ayant une grande force mais peu de vie pouvant attaquer à distance.
+Super-Prêtre : Personnage ayant un grand charisme et pouvant convertir à distance.
+
+\subsection{JeTeVois}
+JeTeVois est un personnage centré sur la technique du coup d'état. Il possède pour cela un charisme élevé, 65, une défense pour ne pas être tué du premier coup et donc tenter une fuite, 11, et une vie permettant aussi de ne pas être tué, 24.\\
+Il va chercher à se mettre sous la protection d'un leader pour pouvoir gagner en vitesse et augmenter ses caractéristique pour faire son coup d'état.
+
+\subsection{Sniper}
+Sniper est un personnage à longue portée, il va tirer si personne n'est pas trop proche de lui. Sa force étant son unique atout, elle est maximale, 99. Les règles ne permettant pas d'avoir une vie nulle, elle a été définie à 1.\\
+Il va fuir et tirer le plus souvent possible.
+
+\subsection{Super-Prêtre}
+Super-Prêtre est un personnage à longue portée comme Sniper mais il va utiliser son charisme. Sa caractéristique de charisme est donc maximale, 99, avec une vie de 1.\\
+Comme Sniper il va fuir et convertir le plus souvent possible.
+
+
+\setcounter{section}{0}
+\part{Organisation du travail}
+\section{Outils utilisés}
+\subsection{Intellij Idea}
+Intellij Idea est un environnement de développement (IDE) produit par la société JetBrains. Nous avons décidé de le préférer à Eclipse car il s'agit d'un IDE spécialisé dans le code Java. De plus il s'agit d'un produit intégrant correctement le fonctionnement de Git et permettant de créer un projet directement depuis nos sources GitHub. De plus il s'agit d'un IDE à destination des professionnels et donc de nous habituer à un autre IDE.
+
+\subsection{Git et GitHub}
+Le principal problème d'un travail en équipe est la gestion des fichiers. Afin de palier à ce problème, nous avons pris le parti d'utiliser un gestionnaire de version couplé à un serveur distant.\\
+Le gestionnaire de version était Git qui est un gestionnaire de version reconnu et surtout décentralisé. Cette décentralisation permet de créer des branches pour ajouter des fonctionnalités à notre projet et aussi de ne pas avoir à tenir compte du travail de l'autre avant la mise en commun. Son système de gestion de fichier intelligent permet de fusionner les fichiers et de choisir en cas de conflit les morceaux de code en conflit à garder.\\
+GitHub est donc le site distant qui nous permet d'accéder à la dernière version de notre code où que nous soyons : ordinateurs personnels, ordinateurs de l'université mais aussi les VM de cloudmip, ce qui nous permet de récupérer les fichiers sans passer par des dizaines de commandes.
+
+\subsection{LaTeX}
+LaTeX est un langage de description de document permettant de formaliser un document écrit sous une forme esthétique et épurée.
+Ce rapport a été produit sous cette forme grâce à l'utilisation du langage LaTeX, ainsi que le site Web sharelatex.com, qui nous a permis la composition, l'édition simultanée et la pré-visualisation en temps réel.
+
+\section{Répartition des tâches}
+La répartition des tâches s'est faite de manière naturelle. Lors de la prise en main, il s'agissait pour chacun de prendre en main le projet et nous n'avions pas à réellement partager le projet.
+Lors de la version collective, la répartition s'est faite sur la correction du code. Nous avons dû tester les limites de la nouvelle version, ce qui passait par une nouvelle phase de test, et créer de nouveaux personnages. Dès la version bien prise en main, nous nous sommes répartis la stratégie de notre personnage central et les fonctions annexes. Notre bonne communication nous permettait de changer de place afin de corriger un bug chez l'autre et donc pouvoir avancer plus vite.
+
+\part{Problèmes rencontrés}
+Les différents problèmes rencontrés n'ont jamais été insurmontable. Il s'agissait principalement de la compréhension du fonctionnement des différentes classes proposées. Ce projet étant un prolongement d'une application existante, il a fallu étudier le programme en profondeur avant de commencer notre propre code.
+
+\clearpage
+\part{Remerciements}
+\thanks{Nous tenons à remercier l'équipe enseignante pour le soutien apporté durant ce projet, ainsi qu'aux élèves et enseignants très présents sur les forums.}
+
+\part{Conclusion}
+
+\subsection*{Général}
+Pour conclure, nous pouvons affirmer que le sujet s'est bien passé, nous avons su faire face à de nombreux obstacles dans le processus de développement et de compréhension intégrale du sujet et du code fourni au préalable. 
+
+Nous avons correctement assuré notre présence sur les forums dédiés aux règles et aux annonces concernant les problèmes rencontré avec le langage Java. Nous avons signalé plusieurs erreurs dans le code et aussi proposé des solutions.
+
+\subsection*{Gestion du temps}
+Pour ce qui est de la gestion du temps, nous avions prévu d'avoir terminé la conception complète de notre personnage dans la soirée du Mercredi 7 Janvier, et ainsi consacrer la journée du Jeudi 8 Janvier à tester, corriger les erreurs, et mettre en forme le rapport construit sur la base de notes et échanges prises au fur et à mesure du projet.
+
+Dans les faits nous étions en légère avance, car dès le Mercredi 7 en fin d'après midi nous pouvions effectuer les premiers tests. Ceux-ci et leurs correctifs ont duré jusqu'au Jeudi en mi-journée.
+
+\subsection*{Expérience}
+Ce projet nous a permis de gagner en expérience sur le langage Java, et de découvrir certaines nouvelles composantes et méthodes utilisées
+dans l'application, ainsi que d'apprécier la collaboration avec de nombreuses équipes et le résultat final: le tournoi, que nous attendons avec impatience afin de faire s'affronter notre personnage à ceux des autres.
+Cette expérience nous a aussi permis d'utiliser outils que nous n'avions pas encore utilisé lors de notre cursus.
+
+\clearpage
+\tableofcontents
+
+\end{document}
