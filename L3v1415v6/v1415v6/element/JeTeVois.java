@@ -164,13 +164,9 @@ public class JeTeVois extends Personnage {
 					this.nombreTourPoursuite++;
 				}
 				else {
-					parler("J'erre...2", ve);
+					parler("Je vais voir le perso le plus éloigné de moi", ve);
 
-					if((newDir=trouverEnnemiFacile(ve))!=null){
-						deplacements.seDirigerVers(newDir);
-					}
-					else
-						deplacements.seDirigerVers(new Point(50,50)); // On aime le centre
+					deplacements.seDirigerVers(personnagePlusEloigne(ve));
 					this.nombreTourPoursuite = 0;
 				}
 			}
@@ -276,5 +272,28 @@ public class JeTeVois extends Personnage {
 		}
 
 		return null;
+	}
+
+	protected Integer personnagePlusEloigne(VueElement vueElement) {
+		int distanceMax = 0;
+		int refPlusLoin = -1;
+		int distance = 0;
+		try {
+			//Pour tous les objets 'visibles'
+			for(VueElement ve : vueElement.getControleur().getArene().getWorld())
+			{
+				//Si le personnage est le plus éloigné
+				if((distance = Calculs.distanceChebyshev(vueElement.getPoint(),ve.getPoint())) > distanceMax) {
+					distanceMax = distance;
+					refPlusLoin = ve.getRef();
+				}
+			}
+		}
+		catch (RemoteException e) {
+			return refPlusLoin;
+		}
+
+
+		return refPlusLoin;
 	}
 }
