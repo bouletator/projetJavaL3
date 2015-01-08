@@ -98,8 +98,8 @@ public class JeTeVois extends Personnage {
 						fuir(ve, cible, deplacements);
 						this.nombreTourPoursuite = 0;
 					}
-					else if(!memeEquipe && adversaire.getLeader() == -1 && (adversaire.getEquipe().size()) > this.getEquipe().size()) { // on cherche à se faire convertir par l'autre leader si son équipe est plus grande
-						// duel
+					else if(!memeEquipe && adversaire.getLeader() != -1 && !isDanger(adversaire) && (adversaire.getEquipe().size()) > this.getEquipe().size()) { // on cherche à se faire convertir par l'autre leader si son équipe est plus grande
+						// si c'est un coequipier
 						parler("Je vais voir ailleurs ! " + refPlusProche, ve);
 						deplacements.seDirigerVers(refPlusProche);
 						this.nombreTourPoursuite = 0;
@@ -120,16 +120,16 @@ public class JeTeVois extends Personnage {
 
 				Point newDir;
 
-				if(!memeEquipe && dernierPersonnage(ve)) { //On cherche à aller tuer notre leader si il ne reste qu'un personnage
+				if(!memeEquipe && dernierPersonnage(ve) && this.getLeader()!=-1) { //On cherche à aller tuer notre leader si il ne reste qu'un personnage
 					parler("Je vais vers mon leader " + this.getLeader(), ve);
 					deplacements.seDirigerVers(this.getLeader());
 					this.nombreTourPoursuite = 0;
 
 				}
-				else if(cible.getControleur().getElement() instanceof Personnage && isDanger((Personnage)cible.getControleur().getElement()))
+				else if(cible.getControleur().getElement() instanceof Personnage && isDanger((Personnage) cible.getControleur().getElement()))
 				{
 					parler("Je fuis un danger",ve);
-					fuir(ve, cible,deplacements);
+					fuir(ve, cible, deplacements);
 					this.nombreTourPoursuite = 0;
 				}
 				else if(cible.getControleur().getElement() instanceof Potion && isBonnePotion(cible.getControleur().getElement()))
@@ -145,21 +145,32 @@ public class JeTeVois extends Personnage {
 					deplacements.seDirigerVers(newDir);
 					this.nombreTourPoursuite = 0;
 				}
-				else if(!memeEquipe && this.getLeader() == -1 && this.getEquipe().size() > 0)//On est leader et on va convertir une personne qui n'est pas de notre équipe
+				//Si il est convertible
+				else if(!memeEquipe  && !isDanger((Personnage)cible.getControleur().getElement()))//On est leader et on va convertir une personne qui n'est pas de notre équipe
 				{
 					if(this.nombreTourPoursuite == NOMBRE_TOUR_POURSUITE_MAX)//On ne poursuis pas indéfiniment
 					{
-						voisins.remove(referencePoursuivie);
-						refPlusProche = Calculs.chercherElementProche(ve,voisins).getRef();
+						parler("Je ne poursuis plus mon voisin " + refPlusProche, ve);
+						//voisins.remove(referencePoursuivie);
+						fuir(ve, cible, deplacements);
+						//refPlusProche = Calculs.chercherElementProche(ve,voisins).getRef();
+						nombreTourPoursuite=0;
 					}
-					parler("Je vais vers le plus proche car il ne présente pas de danger", ve);
-					deplacements.seDirigerVers(refPlusProche);
-					this.referencePoursuivie = refPlusProche;
+					else {
+						parler("Je vais vers le plus proche car il ne présente pas de danger", ve);
+						deplacements.seDirigerVers(refPlusProche);
+						this.referencePoursuivie = refPlusProche;
+					}
 					this.nombreTourPoursuite++;
 				}
 				else {
 					parler("J'erre...2", ve);
-					deplacements.seDirigerVers(new Point(50,50)); // On aime le centre
+
+					if((newDir=trouverEnnemiFacile(ve))!=null){
+						deplacements.seDirigerVers(newDir);
+					}
+					else
+						deplacements.seDirigerVers(new Point(50,50)); // On aime le centre
 					this.nombreTourPoursuite = 0;
 				}
 			}

@@ -300,12 +300,16 @@ public class Personnage extends Element implements IPersonnage {
 					// je vais vers le plus proche
 					if(nombreTourPoursuite == NOMBRE_TOUR_POURSUITE_MAX)
 					{
-						voisins.remove(referencePoursuivie);
-						refPlusProche = Calculs.chercherElementProche(ve,voisins).getRef();
+						parler("Je ne poursuis plus mon voisin " + refPlusProche, ve);
+						//voisins.remove(referencePoursuivie);
+						fuir(ve, cible, deplacements);
+						//refPlusProche = Calculs.chercherElementProche(ve,voisins).getRef();
+						nombreTourPoursuite=0;
 					}
-					parler("Je vais vers mon voisin " + refPlusProche, ve);
-					deplacements.seDirigerVers(refPlusProche);
-					referencePoursuivie = refPlusProche;
+					else {
+						deplacements.seDirigerVers(refPlusProche);
+						referencePoursuivie = refPlusProche;
+					}
 					nombreTourPoursuite++;
 
 				} else {
