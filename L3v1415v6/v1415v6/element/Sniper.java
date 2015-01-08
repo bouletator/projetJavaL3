@@ -2,6 +2,7 @@ package element;
 
 import interaction.Actions;
 import interaction.Deplacements;
+import interaction.DuelBasic;
 import interfaceGraphique.VueElement;
 import utilitaires.Calculs;
 
@@ -40,7 +41,19 @@ public class Sniper extends Personnage{
 		System.out.println(ve.getPoint());
 
 		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
-			actions.interaction(ve.getRef(),personnagePlusEloigne(ve).getRef(),ve.getControleur().getArene());
+			VueElement cible=personnagePlusEloigne(ve);
+			if(cible!=null) {
+				parler("Je vise et tire...En contournant les vérifs", ve);
+
+				//TODO LOOOOOOOOOOOOOOOOOOL En invoquant un DuelBasic je force un combat à se réaliser peu importe la distance
+				DuelBasic duelBasic = new DuelBasic(ve.getControleur().getArene(), ve.getControleur(),cible.getControleur());
+				duelBasic.realiserCombat();
+			}
+			else
+			{
+				parler("Personne en mire...", ve);
+				deplacements.seDirigerVers(0);
+			}
 		}
 
 		else {
@@ -73,7 +86,18 @@ public class Sniper extends Personnage{
 				}
 			}
 			else { // sinon on tire sur l'ennemi le plus éloigné voisins
-				actions.interaction(ve.getRef(),personnagePlusEloigne(ve).getRef(),ve.getControleur().getArene());
+				cible = personnagePlusEloigne(ve);
+				if(cible!=null) {
+					parler("Je vise et tire...", ve);
+					//TODO LOOOOOOOOOOOOOOOOOOL En invoquant un DuelBasic je force un combat à se réaliser peu importe la distance
+					DuelBasic duelBasic = new DuelBasic(ve.getControleur().getArene(), ve.getControleur(),cible.getControleur());
+					duelBasic.realiserCombat();
+				}
+				else
+				{
+					parler("Personne en mire...", ve);
+					deplacements.seDirigerVers(0);
+				}
 			}
 
 
@@ -117,7 +141,7 @@ public class Sniper extends Personnage{
 			for(VueElement ve : vueElement.getControleur().getArene().getWorld())
 			{
 				//Si le personnage est le plus éloigné
-				if((distance = Calculs.distanceChebyshev(vueElement.getPoint(),ve.getPoint())) > distanceMax) {
+				if(!ve.equals(vueElement) && (distance = Calculs.distanceChebyshev(vueElement.getPoint(),ve.getPoint())) > distanceMax) {
 					distanceMax = distance;
 					elementLointain = ve;
 				}

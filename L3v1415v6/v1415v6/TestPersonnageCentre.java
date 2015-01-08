@@ -37,7 +37,7 @@ public class TestPersonnageCentre {
 			int defense = r.nextInt(100-force-vie-charisme)/60;
 			System.out.println("Defense "+defense);
 			int vitesse = 1;
-			Personnage bidule = new Sniper("Perso", 58+r.nextInt(4),0,20,1,10);
+			Personnage bidule = new Sniper("Sniper", 58+r.nextInt(4),0,20,1,10);
 			
 			new Console(bidule, 40+r.nextInt(30), 40+r.nextInt(30), port, ipArene);
 		} catch (RemoteException e) {
