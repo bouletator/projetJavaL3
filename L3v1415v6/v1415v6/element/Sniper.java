@@ -45,7 +45,6 @@ public class Sniper extends Personnage{
 			if(cible!=null) {
 				parler("Je vise et tire...En contournant les vérifs", ve);
 
-				//TODO LOOOOOOOOOOOOOOOOOOL En invoquant un DuelBasic je force un combat à se réaliser peu importe la distance
 				DuelBasic duelBasic = new DuelBasic(ve.getControleur().getArene(), ve.getControleur(),cible.getControleur());
 				duelBasic.realiserCombat();
 			}
@@ -89,7 +88,6 @@ public class Sniper extends Personnage{
 				cible = personnagePlusEloigne(ve);
 				if(cible!=null) {
 					parler("Je vise et tire...", ve);
-					//TODO LOOOOOOOOOOOOOOOOOOL En invoquant un DuelBasic je force un combat à se réaliser peu importe la distance
 					DuelBasic duelBasic = new DuelBasic(ve.getControleur().getArene(), ve.getControleur(),cible.getControleur());
 					duelBasic.realiserCombat();
 				}

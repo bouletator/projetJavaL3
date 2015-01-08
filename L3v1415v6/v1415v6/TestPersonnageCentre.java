@@ -28,16 +28,7 @@ public class TestPersonnageCentre {
 			}
 
 			Random r = new Random(System.currentTimeMillis());
-			int force = r.nextInt(40)+50;
-			System.out.println("Force " + force);
-			int vie = r.nextInt(100-force);
-			System.out.println("HP "+vie);
-			int charisme = r.nextInt(100-force-vie);
-			System.out.println("Charisme "+charisme);
-			int defense = r.nextInt(100-force-vie-charisme)/60;
-			System.out.println("Defense "+defense);
-			int vitesse = 1;
-			Personnage bidule = new Sniper("Sniper", 58+r.nextInt(4),0,20,1,10);
+			Personnage bidule = new JeTeVois("ISeeYou", 0,60,20,1,11);
 			
 			new Console(bidule, 40+r.nextInt(30), 40+r.nextInt(30), port, ipArene);
 		} catch (RemoteException e) {

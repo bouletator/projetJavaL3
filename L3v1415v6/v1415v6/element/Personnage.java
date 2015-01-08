@@ -6,6 +6,7 @@ package element;
 
 import interaction.Actions;
 import interaction.Deplacements;
+import interaction.DuelBasic;
 import interfaceGraphique.VueElement;
 
 import java.awt.*;
@@ -256,11 +257,25 @@ public class Personnage extends Element implements IPersonnage {
 		Actions actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
 		Deplacements deplacements = new Deplacements(ve, voisins);
 
-		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
-			parler("J'erre...", ve);
-			deplacements.seDirigerVers(0); //errer
+		System.out.println(ve.getPoint());
 
-		} else {
+		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
+			VueElement cible=personnagePlusEloigne(ve);
+			if(cible!=null) {
+				parler("Je vise et tire...En contournant les vérifs", ve);
+
+				DuelBasic duelBasic = new DuelBasic(ve.getControleur().getArene(), ve.getControleur(),cible.getControleur());
+				duelBasic.realiserCombat();
+			}
+			else
+			{
+				parler("Personne en mire...", ve);
+				deplacements.seDirigerVers(0);
+			}
+		}
+
+		else {
+
 			VueElement cible = Calculs.chercherElementProche(ve, voisins);
 
 			int distPlusProche = Calculs.distanceChebyshev(ve.getPoint(), cible.getPoint());
@@ -272,54 +287,63 @@ public class Personnage extends Element implements IPersonnage {
 			boolean memeEquipe = false;
 
 			if (elemPlusProche instanceof Personnage) {
-				memeEquipe = (leader != -1 && leader == ((Personnage) elemPlusProche).getLeader()) || // meme leader
-						leader == refPlusProche || // cible est le leader de this
+				memeEquipe = (this.getLeader() != -1 && this.getLeader() == ((Personnage) elemPlusProche).getLeader()) || // meme leader
+						this.getLeader() == refPlusProche || // cible est le leader de this
 						((Personnage) elemPlusProche).getLeader() == refRMI; // this est le leader de cible
 			}
 
-			if (distPlusProche <= 2) { // si suffisamment proches
-				if (elemPlusProche instanceof Potion) { // potion
-					// ramassage
-					parler("Je ramasse une potion", ve);
-					actions.ramasser(refRMI, refPlusProche, ve.getControleur().getArene());
-
-				} else { // personnage
-					if (!memeEquipe) { // duel seulement si pas dans la meme equipe (pas de coup d'etat possible dans ce cas)
-						// duel
-						parler("Je fais un duel avec " + refPlusProche, ve);
-						actions.interaction(refRMI, refPlusProche, ve.getControleur().getArene());
-						nombreTourPoursuite = 0;
-					} else {
-						parler("J'erre...", ve);
-						deplacements.seDirigerVers(0); // errer
-						nombreTourPoursuite = 0;
-					}
+			if (distPlusProche <= 5) { // si suffisamment proches
+				if (elemPlusProche instanceof Personnage && isDanger((Personnage) elemPlusProche)) { //ennemi dangereux
+					fuir(ve,cible,deplacements);
 				}
-			} else { // si voisins, mais plus eloignes
-				if (!memeEquipe) { // potion ou enemmi
-					// je vais vers le plus proche
-					if(nombreTourPoursuite == NOMBRE_TOUR_POURSUITE_MAX)
-					{
-						parler("Je ne poursuis plus mon voisin " + refPlusProche, ve);
-						//voisins.remove(referencePoursuivie);
-						fuir(ve, cible, deplacements);
-						//refPlusProche = Calculs.chercherElementProche(ve,voisins).getRef();
-						nombreTourPoursuite=0;
-					}
-					else {
-						deplacements.seDirigerVers(refPlusProche);
-						referencePoursuivie = refPlusProche;
-					}
-					nombreTourPoursuite++;
+				else
+				{
+					actions.interaction(ve.getRef(),cible.getRef(),ve.getControleur().getArene());
+				}
+			}
+			else { // sinon on tire sur l'ennemi le plus éloigné voisins
+				cible = personnagePlusEloigne(ve);
+				if(cible!=null) {
+					parler("Je vise et tire...", ve);
+					DuelBasic duelBasic = new DuelBasic(ve.getControleur().getArene(), ve.getControleur(),cible.getControleur());
+					duelBasic.realiserCombat();
+				}
+				else
+				{
+					parler("Personne en mire...", ve);
+					deplacements.seDirigerVers(0);
+				}
+			}
 
-				} else {
-					parler("J'erre...", ve);
-					deplacements.seDirigerVers(0); // errer
-					nombreTourPoursuite = 0;
+
+		}
+	}
+
+
+	protected VueElement personnagePlusEloigne(VueElement vueElement) {
+		int distanceMax = 0;
+		VueElement elementLointain = null;
+		int distance = 0;
+		try {
+			//Pour tous les objets 'visibles'
+			for(VueElement ve : vueElement.getControleur().getArene().getWorld())
+			{
+				//Si le personnage est le plus éloigné
+				if(ve.getControleur().getElement() instanceof Personnage && !ve.equals(vueElement) && (distance = Calculs.distanceChebyshev(vueElement.getPoint(),ve.getPoint())) > distanceMax) {
+					distanceMax = distance;
+					elementLointain = ve;
 				}
 			}
 		}
+		catch (RemoteException e) {
+			return elementLointain;
+		}
+
+
+		return elementLointain;
 	}
+
+
 	protected boolean isBonnePotion(Element element){
 
 		Potion potion =(Potion) element;
