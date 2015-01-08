@@ -212,7 +212,7 @@ public class Arene extends UnicastRemoteObject implements IArene, Runnable {
         		res = "Votre personnage a une vitesse differente de 1";
         	//MODIFIE
         	if((p.getCharisme() + p.getForce() + p.getHP() /* + p.getVitesse() */ +  (int)((10.0/6.0) * p.getDefense())) > 100){ 
-        		res = "Votre personnage ne respecte pas l'equation d'entree sur serveur : Charisme + force + (10/6)defense <= 100 ";
+        		res = "Votre personnage ne respecte pas l'equation d'entree sur serveur : Charisme + force + hp + (10/6)defense <= 100 ";
         	}
         	if (p.getHP() < 1){
         		res = "Votre personnage est deja mort, il des HP nuls ou negatifs";

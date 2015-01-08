@@ -69,13 +69,17 @@ public class DuelBasic implements IDuel {
 			} else if (isLeader(defenseur, attaquant)) {
 				if(attCharisme > defCharisme) {
 					// coup d'etat
-
 					int tauxCharisme = (int) (0.1 * defenseur.getElement().getCaract("charisme"));
 					
-					int maximized = attaquant.getElement().getCaract("charisme") + tauxCharisme;
-					if(maximized > 100)maximized = 100;
-					attaquant.getElement().setCharisme(maximized);
-					defenseur.getElement().setCharisme(defenseur.getElement().getCaract("charisme") - tauxCharisme);
+					int attNewChar =  Math.min(attaquant.getElement().getCaract("charisme") + tauxCharisme, 100);
+					Hashtable<String, Integer> carAtt = new Hashtable<String, Integer>();
+					carAtt.put("charisme", attNewChar);
+					attaquant.majCaractElement(carAtt);
+					
+					int defNewChar = Math.max(defenseur.getElement().getCaract("charisme") - tauxCharisme, 0);
+					Hashtable<String, Integer> carDef = new Hashtable<String, Integer>();
+					carDef.put("charisme", defNewChar);
+					defenseur.majCaractElement(carDef);
 	
 					defenseur.changerLeader(attaquant);
 					attaquant.ajouterPersonnageEquipe(defenseur);
@@ -129,8 +133,7 @@ public class DuelBasic implements IDuel {
 		int attForce = attaquant.getElement().getCaract("force");
 		int defDef = defenseur.getElement().getCaract("defense");
 		Random r = new Random(System.currentTimeMillis());
-		int totalPerdu = (int) ((r.nextInt(11) + attForce) * (1-(double)defDef/100));
-
+		int totalPerdu =  (r.nextInt(11) + attForce) * (1 - (int)((float)defDef/100.0));
 		defHp -= totalPerdu;
 		
 		System.out.println("Ouch j'ai perdu " + totalPerdu + ", il me reste " + ((Personnage)defenseur.getElement()).getHP() + " points de vie.");

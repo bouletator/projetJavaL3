@@ -91,7 +91,7 @@ public class Actions implements IActions {
 				if (s.equals("defense")){
 					val = Math.min(Math.max(val + valeursPot.get(s), 0), 60);
 				}
-				if (s.equals("vitesse")){
+				else if (s.equals("vitesse")){
 					val = Math.min(Math.max(val + valeursPot.get(s), 1), 4);
 				}else{
 					val = Math.min(Math.max(val + valeursPot.get(s), 0), 100);
