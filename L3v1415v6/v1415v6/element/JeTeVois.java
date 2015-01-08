@@ -138,13 +138,14 @@ public class JeTeVois extends Personnage {
 					deplacements.seDirigerVers(refPlusProche);
 					this.nombreTourPoursuite = 0;
 				}
-				else if(this.getLeader() == -1 && this.getEquipe().size() == 0 && (newDir = trouverMeilleurLeader(ve))!=null)//On est pas leader
+				else if(this.getLeader() == -1 && this.getEquipe().size() == 0 && (newDir = trouverMeilleurLeader(ve))!=null)//On est pas leader et on en cherche un
+				
 				{
 					parler("Je vais me trouver un leader !", ve);
 					deplacements.seDirigerVers(newDir);
 					this.nombreTourPoursuite = 0;
 				}
-				else if(this.getLeader() == -1 && this.getEquipe().size() > 0)//On est leader
+				else if(!memeEquipe && this.getLeader() == -1 && this.getEquipe().size() > 0)//On est leader et on va convertir une personne qui n'est pas de notre équipe
 				{
 					if(this.nombreTourPoursuite == NOMBRE_TOUR_POURSUITE_MAX)//On ne poursuis pas indéfiniment
 					{
