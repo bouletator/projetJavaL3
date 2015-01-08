@@ -13,7 +13,6 @@ import java.rmi.RemoteException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
-import serveur.IArene;
 import utilitaires.Calculs;
 
 /**
@@ -35,6 +34,10 @@ public class Personnage extends Element implements IPersonnage {
 	 */
 	private ArrayList<Integer> equipe;
 
+
+	protected Integer referencePoursuivie = -1;
+	protected Integer nombreTourPoursuite = 0;
+	protected Integer NOMBRE_TOUR_POURSUITE_MAX = 5;
 
 	/**
 	 * Constructeur d'un personnage avec un nom et une quantite de force et de charisme.
@@ -247,7 +250,7 @@ public class Personnage extends Element implements IPersonnage {
 	 * @param ve vue de l'element
 	 * @param voisins element voisins de cet element
 	 * @param refRMI reference attribuee a cet element par le serveur
-	 * @throws RemoteException
+	 * @throws java.rmi.RemoteException
 	 */
 	public void strategie(VueElement ve, Hashtable<Integer,VueElement> voisins, Integer refRMI) throws RemoteException {
 		Actions actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
@@ -285,20 +288,30 @@ public class Personnage extends Element implements IPersonnage {
 						// duel
 						parler("Je fais un duel avec " + refPlusProche, ve);
 						actions.interaction(refRMI, refPlusProche, ve.getControleur().getArene());
+						nombreTourPoursuite = 0;
 					} else {
 						parler("J'erre...", ve);
 						deplacements.seDirigerVers(0); // errer
+						nombreTourPoursuite = 0;
 					}
 				}
 			} else { // si voisins, mais plus eloignes
 				if (!memeEquipe) { // potion ou enemmi
 					// je vais vers le plus proche
+					if(nombreTourPoursuite == NOMBRE_TOUR_POURSUITE_MAX)
+					{
+						voisins.remove(referencePoursuivie);
+						refPlusProche = Calculs.chercherElementProche(ve,voisins).getRef();
+					}
 					parler("Je vais vers mon voisin " + refPlusProche, ve);
 					deplacements.seDirigerVers(refPlusProche);
+					referencePoursuivie = refPlusProche;
+					nombreTourPoursuite++;
 
 				} else {
 					parler("J'erre...", ve);
 					deplacements.seDirigerVers(0); // errer
+					nombreTourPoursuite = 0;
 				}
 			}
 		}
