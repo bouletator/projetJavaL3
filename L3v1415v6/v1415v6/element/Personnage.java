@@ -367,8 +367,9 @@ public class Personnage extends Element implements IPersonnage {
 			actions.interaction(per.getRef(), targetVe.getRef(), per.getControleur().getArene());
 		} catch (RemoteException e) {
 			e.printStackTrace();
+			return;
 		}
-		return;
+
 	}
 
 

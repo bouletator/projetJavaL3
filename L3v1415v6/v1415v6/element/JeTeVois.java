@@ -111,8 +111,19 @@ public class JeTeVois extends Personnage {
 						this.nombreTourPoursuite = 0;
 					}
 					else {
+						Point newDir;
 						parler("J'erre...1", ve);
-						deplacements.seDirigerVers(0); // errer
+						if((newDir=trouverMeilleurePotion(ve))!=null){
+							parler("Je cherche une potion pas trop loin...", ve);
+							deplacements.seDirigerVers(newDir);
+						}
+						else if((newDir=trouverEnnemiFacile(ve))!=null){
+							parler("Je cherche quelqu'un à convertir...", ve);
+							deplacements.seDirigerVers(newDir);
+						}
+						else {
+							deplacements.seDirigerVers(0); // errer
+						}
 						this.nombreTourPoursuite = 0;
 					}
 				}
