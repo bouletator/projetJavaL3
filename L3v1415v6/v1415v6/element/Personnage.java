@@ -396,7 +396,6 @@ public class Personnage extends Element implements IPersonnage {
 
 		}
 		catch (RemoteException re){
-			//TODO Supprimer la trace
 			System.out.println("Remote exception Catched. Coming from VueElement 'visibility'");
 			return false;
 		}
@@ -432,7 +431,6 @@ public class Personnage extends Element implements IPersonnage {
 
 		}
 		catch (RemoteException re){
-			//TODO Supprimer la trace
 			System.out.println("Remote exception Catched. Coming from VueElement 'visibility'");
 			return null;
 		}

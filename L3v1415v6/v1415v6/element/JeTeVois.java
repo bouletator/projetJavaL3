@@ -217,7 +217,6 @@ public class JeTeVois extends Personnage {
 		// si le personnage peut nous faire très mal mais pas tuer en un coup critique
 		// et si on peut le convertir
 		if (thisMaxHPApresAttaque > 0 && thisMinHPApresAttaque <= CRITICAL_RANGE) {
-			//TODO A choisir. Peut être que c'est une situation plus dangeureuse que prévue
 			return false;
 		}
 
@@ -225,7 +224,6 @@ public class JeTeVois extends Personnage {
 		if (personnage.getHP() - (CRITICAL_RANGE + this.getForce()) * (1 - personnage.getDefense()/100) < 0)
 			return false;
 
-		//TODO Cas de base
 		return true;
 	}
 
@@ -243,7 +241,6 @@ public class JeTeVois extends Personnage {
 			}
 		}
 		catch (RemoteException re){
-			//TODO Supprimer la trace
 			System.out.println("Remote exception Catched. Coming from VueElement 'visibility'");
 			return null;
 		}
@@ -266,7 +263,6 @@ public class JeTeVois extends Personnage {
 			}
 		}
 		catch (RemoteException re){
-			//TODO Supprimer la trace
 			System.out.println("Remote exception Catched. Coming from VueElement 'visibility'");
 			return null;
 		}
