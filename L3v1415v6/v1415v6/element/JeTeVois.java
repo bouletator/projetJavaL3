@@ -281,9 +281,9 @@ public class JeTeVois extends Personnage {
 		return null;
 	}
 
-	protected Integer personnagePlusEloigne(VueElement vueElement) {
+	protected Point personnagePlusEloigne(VueElement vueElement) {
 		int distanceMax = 0;
-		int refPlusLoin = -1;
+		Point objetPlusLoin = null;
 		int distance = 0;
 		try {
 			//Pour tous les objets 'visibles'
@@ -292,15 +292,15 @@ public class JeTeVois extends Personnage {
 				//Si le personnage est le plus éloigné
 				if((distance = Calculs.distanceChebyshev(vueElement.getPoint(),ve.getPoint())) > distanceMax) {
 					distanceMax = distance;
-					refPlusLoin = ve.getRef();
+					objetPlusLoin = ve.getPoint();
 				}
 			}
 		}
 		catch (RemoteException e) {
-			return refPlusLoin;
+			return objetPlusLoin;
 		}
 
 
-		return refPlusLoin;
+		return objetPlusLoin;
 	}
 }
