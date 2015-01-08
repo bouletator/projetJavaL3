@@ -38,10 +38,10 @@ public class JeTeVois extends Personnage {
 		Deplacements deplacements = new Deplacements(ve,voisins);
 
 		System.out.println(ve.getPoint());
-
+	
 		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
-
-			parler("Je cherche une potion...", ve);
+			System.out.println("J'ai pas de voisins");
+			parler("Je cherche un autre objet...", ve);
 			Point pointDir=null;
 			// ON cherche une potion
 			pointDir=trouverMeilleurePotion(ve);
@@ -86,6 +86,7 @@ public class JeTeVois extends Personnage {
 					// ramassage
 
 					if(isBonnePotion(elemPlusProche)) {
+						System.out.println("J'aime les potions");
 						parler("Je ramasse une potion", ve);
 						actions.ramasser(refRMI, refPlusProche, ve.getControleur().getArene());
 						this.nombreTourPoursuite = 0;
@@ -95,35 +96,34 @@ public class JeTeVois extends Personnage {
 					Personnage adversaire = (Personnage) elemPlusProche;
 					if(isDanger(adversaire))
 					{
+						System.out.println("Danger très proche !!");
 						fuir(ve, cible, deplacements);
 						this.nombreTourPoursuite = 0;
 					}
-					else if(!memeEquipe && adversaire.getLeader() != -1 && !isDanger(adversaire) && (adversaire.getEquipe().size()) > this.getEquipe().size()) { // on cherche à se faire convertir par l'autre leader si son équipe est plus grande
+					else if(!memeEquipe && adversaire.getLeader() != -1 && !isDanger(adversaire) && (adversaire.getEquipe().size()) > this.getEquipe().size()) 
+					{ // on cherche à se faire convertir par l'autre leader si son équipe est plus grande
 						// si c'est un coequipier
+						System.out.println("Je me cherche un leader");
 						parler("Je vais voir ailleurs ! " + refPlusProche, ve);
 						deplacements.seDirigerVers(refPlusProche);
 						this.nombreTourPoursuite = 0;
 					}
 					else if(!memeEquipe && adversaire.getForce() < this.getCharisme())
 					{
+						System.out.println("Je cherche à convertir");
 						parler("Je convertis quelqu'un qui n'est pas dangereux",ve);
 						convertir(ve, cible, actions);
 						this.nombreTourPoursuite = 0;
 					}
+					else if(memeEquipe && this.getLeader() == refPlusProche && dernierPersonnage(ve))
+					{
+						System.out.println("Je cherche à convertir mon leader");
+						actions.interaction(ve.getRef(),refPlusProche,ve.getControleur().getArene());
+						this.nombreTourPoursuite = 0;
+					}
 					else {
-						Point newDir;
-						parler("J'erre...1", ve);
-						if((newDir=trouverMeilleurePotion(ve))!=null){
-							parler("Je cherche une potion pas trop loin...", ve);
-							deplacements.seDirigerVers(newDir);
-						}
-						else if((newDir=trouverEnnemiFacile(ve))!=null){
-							parler("Je cherche quelqu'un à convertir...", ve);
-							deplacements.seDirigerVers(newDir);
-						}
-						else {
-							deplacements.seDirigerVers(0); // errer
-						}
+						System.out.println("J'erre lamentablement");
+						deplacements.seDirigerVers(0); // errer
 						this.nombreTourPoursuite = 0;
 					}
 				}
@@ -131,7 +131,8 @@ public class JeTeVois extends Personnage {
 
 				Point newDir;
 
-				if(!memeEquipe && dernierPersonnage(ve) && this.getLeader()!=-1) { //On cherche à aller tuer notre leader si il ne reste qu'un personnage
+				if(dernierPersonnage(ve) && this.getLeader()!=-1) { //On cherche à aller tuer notre leader si il ne reste qu'un personnage
+					System.out.println("Je vais tuer mon leader !!!");
 					parler("Je vais vers mon leader " + this.getLeader(), ve);
 					deplacements.seDirigerVers(this.getLeader());
 					this.nombreTourPoursuite = 0;
@@ -139,19 +140,21 @@ public class JeTeVois extends Personnage {
 				}
 				else if(cible.getControleur().getElement() instanceof Personnage && isDanger((Personnage) cible.getControleur().getElement()))
 				{
+					System.out.println("Je fuis lachement");
 					parler("Je fuis un danger",ve);
 					fuir(ve, cible, deplacements);
 					this.nombreTourPoursuite = 0;
 				}
 				else if(cible.getControleur().getElement() instanceof Potion && isBonnePotion(cible.getControleur().getElement()))
 				{
+					System.out.println("J'aime toujours les potions");
 					parler("Je vais chercher une potion que j'aime",ve);
 					deplacements.seDirigerVers(refPlusProche);
 					this.nombreTourPoursuite = 0;
 				}
 				else if(this.getLeader() == -1 && this.getEquipe().size() == 0 && (newDir = trouverMeilleurLeader(ve))!=null)//On est pas leader et on en cherche un
-				
 				{
+					System.out.println("Je me cherche un leader à aimer");
 					parler("Je vais me trouver un leader !", ve);
 					deplacements.seDirigerVers(newDir);
 					this.nombreTourPoursuite = 0;
@@ -159,6 +162,7 @@ public class JeTeVois extends Personnage {
 				//Si il est convertible
 				else if(!memeEquipe  && !isDanger((Personnage)cible.getControleur().getElement()))//On est leader et on va convertir une personne qui n'est pas de notre équipe
 				{
+					System.out.println("Je cherche à convertir");
 					if(this.nombreTourPoursuite == NOMBRE_TOUR_POURSUITE_MAX)//On ne poursuis pas indéfiniment
 					{
 						parler("Je ne poursuis plus mon voisin " + refPlusProche, ve);
@@ -175,6 +179,7 @@ public class JeTeVois extends Personnage {
 					this.nombreTourPoursuite++;
 				}
 				else {
+					System.out.println("J'aime l'inconnu !");
 					parler("Je vais voir le perso le plus éloigné de moi", ve);
 
 					deplacements.seDirigerVers(personnagePlusEloigne(ve));
