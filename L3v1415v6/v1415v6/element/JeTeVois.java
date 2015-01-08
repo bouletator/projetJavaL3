@@ -36,8 +36,6 @@ public class JeTeVois extends Personnage {
 	{
 		Actions actions = new Actions(ve, voisins); //je recupere les voisins (distance < 10)
 		Deplacements deplacements = new Deplacements(ve,voisins);
-
-		System.out.println(ve.getPoint());
 	
 		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
 			System.out.println("J'ai pas de voisins");

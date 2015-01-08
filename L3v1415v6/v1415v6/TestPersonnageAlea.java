@@ -27,8 +27,8 @@ public class TestPersonnageAlea {
 
 			Random r = new Random(System.currentTimeMillis());
 
-			Personnage bidule = new JeTeVois("ISeeYou", 0,60,20,1,12);
-			new Console(bidule, 15+r.nextInt(70), 15+r.nextInt(70), port, ipArene);
+			Personnage iSeeYou = new JeTeVois("ISeeYou", 0,60,20,1,12);
+			new Console(iSeeYou, r.nextInt(100), r.nextInt(100), port, ipArene);
 		} catch (RemoteException e) {
 			e.printStackTrace();
 		}
