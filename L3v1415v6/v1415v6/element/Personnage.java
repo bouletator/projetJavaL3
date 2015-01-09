@@ -260,18 +260,9 @@ public class Personnage extends Element implements IPersonnage {
 		System.out.println(ve.getPoint());
 
 		if (0 == voisins.size()) { // je n'ai pas de voisins, j'erre
-			VueElement cible=personnagePlusEloigne(ve);
-			if(cible!=null) {
-				parler("Je vise et tire...En contournant les vérifs", ve);
+			parler("Personne en mire...", ve);
+			deplacements.seDirigerVers(0);
 
-				DuelBasic duelBasic = new DuelBasic(ve.getControleur().getArene(), ve.getControleur(),cible.getControleur());
-				duelBasic.realiserCombat();
-			}
-			else
-			{
-				parler("Personne en mire...", ve);
-				deplacements.seDirigerVers(0);
-			}
 		}
 
 		else {
@@ -280,29 +271,34 @@ public class Personnage extends Element implements IPersonnage {
 
 			int distPlusProche = Calculs.distanceChebyshev(ve.getPoint(), cible.getPoint());
 
-			int refPlusProche = cible.getRef();
 			Element elemPlusProche = cible.getControleur().getElement();
 
-			// dans la meme equipe ?
-			boolean memeEquipe = false;
 
 			if (elemPlusProche instanceof Personnage) {
-				memeEquipe = (this.getLeader() != -1 && this.getLeader() == ((Personnage) elemPlusProche).getLeader()) || // meme leader
-						this.getLeader() == refPlusProche || // cible est le leader de this
-						((Personnage) elemPlusProche).getLeader() == refRMI; // this est le leader de cible
+				if(cible!=null) {
+					parler("Je vise et tire...En contournant les vérifs", ve);
+
+					DuelBasic duelBasic = new DuelBasic(ve.getControleur().getArene(), ve.getControleur(),cible.getControleur());
+					duelBasic.realiserCombat();
+				}
+				else
+				{
+					parler("Personne en mire...", ve);
+					deplacements.seDirigerVers(0);
+				}
 			}
 
-			if (distPlusProche <= 5) { // si suffisamment proches
+			if (distPlusProche <= 3) { // si suffisamment proches
 				if (elemPlusProche instanceof Personnage && isDanger((Personnage) elemPlusProche)) { //ennemi dangereux
 					fuir(ve,cible,deplacements);
 				}
 				else
 				{
+					parler("Je frappe...", ve);
 					actions.interaction(ve.getRef(),cible.getRef(),ve.getControleur().getArene());
 				}
 			}
-			else { // sinon on tire sur l'ennemi le plus éloigné voisins
-				cible = personnagePlusEloigne(ve);
+			else { // sinon on tire sur l'ennemi parmi les voisins
 				if(cible!=null) {
 					parler("Je vise et tire...", ve);
 					DuelBasic duelBasic = new DuelBasic(ve.getControleur().getArene(), ve.getControleur(),cible.getControleur());
